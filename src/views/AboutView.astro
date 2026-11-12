@@ -1,0 +1,178 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import Img from "../components/Img.astro";
+import CtaBand from "../components/CtaBand.astro";
+import VanBanner from "../components/VanBanner.astro";
+import { site } from "../data/site";
+import { resolveImage } from "../lib/images";
+import { getLang } from "../i18n";
+
+const lang = getLang(Astro.url);
+const copy = {
+  en: {
+    title: "About Us",
+    description: "Karunadu Distributors is a Bengaluru-based food, beverage and FMCG distributor connecting manufacturers with supermarkets, kirana stores and wholesalers across Karnataka.",
+    eyebrow: "About Karunadu Distributors",
+    h1: "Your trusted bridge between brands and local retailers",
+    lede: "Based in Varthur, Bengaluru, we specialise in efficient, reliable distribution of food products, beverages and fast-moving consumer goods to supermarkets, kirana stores and wholesale channels.",
+    heroAlt: "Organised Karunadu Distributors stock",
+    storyEyebrow: "Our story",
+    storyTitle: "Built for Bengaluru's busy shop counters",
+    story: [
+      "Karunadu — “the land of Karnataka” — reflects where we come from and who we serve. We started with a simple observation: neighbourhood shops wanted trending beverages and snacks, while good regional manufacturers struggled to reach those very shelves.",
+      "Today we bridge that gap. We help emerging and established manufacturers scale their market footprint through active distribution, timely deliveries and dedicated customer support — while giving retailers a single, dependable source for the products their customers ask for.",
+    ],
+    sideAlt: "Beekay Juicee kulki drinks distributed by Karunadu Distributors",
+    flowEyebrow: "How we work",
+    flowTitle: "From factory gate to shop shelf",
+    flowLede: "A short, well-run supply chain means fresher stock for retailers and faster sell-through for brands.",
+    flow: [["Manufacturer", "Brands dispatch stock to our Varthur hub."], ["Karunadu hub", "Stock is checked, stored and route-planned."], ["Delivery van", "Branded vans run daily beat routes."], ["Retail shelf", "Shops receive orders within 24–48 hours."]],
+    valuesEyebrow: "What we stand for",
+    valuesTitle: "Why retailers & brands choose us",
+    values: [["On-time, every time", "Fixed delivery routes and a 24–48 hour replenishment promise so shelves never sit empty."], ["100% genuine stock", "We source directly from manufacturers and authorised partners — no grey-market goods."], ["Fair to both sides", "Healthy retailer margins and transparent terms for brands. Long-term relationships over one-off sales."], ["Local people, local knowledge", "Our team knows Bengaluru's neighbourhoods, shop owners and what sells in each area."]],
+    areasEyebrow: "Where we deliver",
+    areasTitle: "Bengaluru first, all of Karnataka next",
+    areasLede: "Our hub in Varthur gives quick access to East and South Bengaluru, with routes expanding city-wide and a growing statewide network.",
+  },
+  kn: {
+    title: "ನಮ್ಮ ಬಗ್ಗೆ",
+    description: "ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ — ಬೆಂಗಳೂರು ಮೂಲದ ಆಹಾರ, ಪಾನೀಯ ಮತ್ತು FMCG ವಿತರಕರು. ಕರ್ನಾಟಕದಾದ್ಯಂತ ತಯಾರಕರನ್ನು ಸೂಪರ್‌ಮಾರ್ಕೆಟ್, ಕಿರಾಣಿ ಅಂಗಡಿ ಮತ್ತು ಸಗಟು ವ್ಯಾಪಾರಿಗಳೊಂದಿಗೆ ಜೋಡಿಸುತ್ತೇವೆ.",
+    eyebrow: "ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಬಗ್ಗೆ",
+    h1: "ಬ್ರ್ಯಾಂಡ್‌ಗಳು ಮತ್ತು ಸ್ಥಳೀಯ ಅಂಗಡಿಗಳ ನಡುವಿನ ನಂಬಿಕೆಯ ಸೇತುವೆ",
+    lede: "ಬೆಂಗಳೂರಿನ ವರ್ತೂರಿನಲ್ಲಿರುವ ನಾವು ಆಹಾರ ಉತ್ಪನ್ನಗಳು, ಪಾನೀಯಗಳು ಮತ್ತು ವೇಗವಾಗಿ ಮಾರಾಟವಾಗುವ ಗ್ರಾಹಕ ವಸ್ತುಗಳನ್ನು (FMCG) ಸೂಪರ್‌ಮಾರ್ಕೆಟ್, ಕಿರಾಣಿ ಅಂಗಡಿ ಮತ್ತು ಸಗಟು ಮಾರುಕಟ್ಟೆಗಳಿಗೆ ಸಮರ್ಥವಾಗಿ, ನಂಬಿಕೆಯಿಂದ ವಿತರಿಸುತ್ತೇವೆ.",
+    heroAlt: "ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್‌ನ ವ್ಯವಸ್ಥಿತ ಗೋದಾಮು",
+    storyEyebrow: "ನಮ್ಮ ಕಥೆ",
+    storyTitle: "ಬೆಂಗಳೂರಿನ ಬಿಡುವಿಲ್ಲದ ಅಂಗಡಿಗಳಿಗಾಗಿ",
+    story: [
+      "“ಕರುನಾಡು” — ಕರ್ನಾಟಕದ ನೆಲ — ನಾವು ಎಲ್ಲಿಂದ ಬಂದವರು ಮತ್ತು ಯಾರಿಗೆ ಸೇವೆ ಸಲ್ಲಿಸುತ್ತೇವೆ ಎಂಬುದನ್ನು ಹೇಳುತ್ತದೆ. ಒಂದು ಸರಳ ಗಮನಿಕೆಯಿಂದ ನಾವು ಆರಂಭಿಸಿದೆವು: ನೆರೆಹೊರೆಯ ಅಂಗಡಿಗಳಿಗೆ ಟ್ರೆಂಡಿಂಗ್ ಪಾನೀಯ ಮತ್ತು ಸ್ನ್ಯಾಕ್ಸ್ ಬೇಕಿತ್ತು; ಉತ್ತಮ ಪ್ರಾದೇಶಿಕ ತಯಾರಕರಿಗೆ ಅದೇ ಶೆಲ್ಫ್‌ಗಳನ್ನು ತಲುಪುವುದು ಕಷ್ಟವಾಗಿತ್ತು.",
+      "ಇಂದು ನಾವು ಆ ಅಂತರವನ್ನು ತುಂಬುತ್ತೇವೆ. ಸಕ್ರಿಯ ವಿತರಣೆ, ಸಮಯಕ್ಕೆ ಸರಿಯಾದ ಡೆಲಿವರಿ ಮತ್ತು ಮೀಸಲು ಗ್ರಾಹಕ ಸೇವೆಯ ಮೂಲಕ ಹೊಸ ಮತ್ತು ಸ್ಥಾಪಿತ ತಯಾರಕರ ಮಾರುಕಟ್ಟೆ ವಿಸ್ತರಿಸುತ್ತೇವೆ — ಅಂಗಡಿಗಳಿಗೆ ಗ್ರಾಹಕರು ಕೇಳುವ ಉತ್ಪನ್ನಗಳ ಒಂದೇ, ನಂಬಿಕೆಯ ಮೂಲವಾಗಿ ನಿಲ್ಲುತ್ತೇವೆ.",
+    ],
+    sideAlt: "ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ವಿತರಿಸುವ ಬೀಕೇ ಜ್ಯೂಸೀ ಕುಲ್ಕಿ ಡ್ರಿಂಕ್ಸ್",
+    flowEyebrow: "ನಮ್ಮ ಕಾರ್ಯವಿಧಾನ",
+    flowTitle: "ಕಾರ್ಖಾನೆಯಿಂದ ಅಂಗಡಿಯ ಶೆಲ್ಫ್‌ವರೆಗೆ",
+    flowLede: "ಚಿಕ್ಕ, ಸುವ್ಯವಸ್ಥಿತ ಪೂರೈಕೆ ಸರಪಳಿ — ಅಂಗಡಿಗಳಿಗೆ ತಾಜಾ ಸ್ಟಾಕ್, ಬ್ರ್ಯಾಂಡ್‌ಗಳಿಗೆ ವೇಗದ ಮಾರಾಟ.",
+    flow: [["ತಯಾರಕರು", "ಬ್ರ್ಯಾಂಡ್‌ಗಳು ಸ್ಟಾಕ್ ಅನ್ನು ನಮ್ಮ ವರ್ತೂರು ಕೇಂದ್ರಕ್ಕೆ ಕಳುಹಿಸುತ್ತವೆ."], ["ಕರುನಾಡು ಕೇಂದ್ರ", "ಸ್ಟಾಕ್ ಪರಿಶೀಲನೆ, ಸಂಗ್ರಹಣೆ ಮತ್ತು ಮಾರ್ಗ ಯೋಜನೆ."], ["ಡೆಲಿವರಿ ವ್ಯಾನ್", "ಬ್ರ್ಯಾಂಡೆಡ್ ವ್ಯಾನ್‌ಗಳು ಪ್ರತಿದಿನ ನಿಗದಿತ ಮಾರ್ಗಗಳಲ್ಲಿ ಸಂಚರಿಸುತ್ತವೆ."], ["ಅಂಗಡಿಯ ಶೆಲ್ಫ್", "24–48 ಗಂಟೆಗಳಲ್ಲಿ ಅಂಗಡಿಗಳಿಗೆ ಆರ್ಡರ್ ತಲುಪುತ್ತದೆ."]],
+    valuesEyebrow: "ನಮ್ಮ ಮೌಲ್ಯಗಳು",
+    valuesTitle: "ಅಂಗಡಿಗಳು & ಬ್ರ್ಯಾಂಡ್‌ಗಳು ನಮ್ಮನ್ನೇ ಏಕೆ ಆರಿಸುತ್ತವೆ",
+    values: [["ಪ್ರತಿ ಬಾರಿ ಸಮಯಕ್ಕೆ ಸರಿಯಾಗಿ", "ನಿಗದಿತ ಡೆಲಿವರಿ ಮಾರ್ಗಗಳು ಮತ್ತು 24–48 ಗಂಟೆಗಳ ಮರುಪೂರೈಕೆ — ಶೆಲ್ಫ್ ಎಂದಿಗೂ ಖಾಲಿಯಾಗದಂತೆ."], ["100% ಅಸಲಿ ಸ್ಟಾಕ್", "ತಯಾರಕರು ಮತ್ತು ಅಧಿಕೃತ ಪಾಲುದಾರರಿಂದ ನೇರ ಖರೀದಿ — ನಕಲಿ ಸರಕು ಇಲ್ಲ."], ["ಎರಡೂ ಕಡೆಗೆ ನ್ಯಾಯ", "ಅಂಗಡಿಗಳಿಗೆ ಉತ್ತಮ ಲಾಭಾಂಶ, ಬ್ರ್ಯಾಂಡ್‌ಗಳಿಗೆ ಪಾರದರ್ಶಕ ಷರತ್ತುಗಳು. ಒಂದು ಬಾರಿಯ ಮಾರಾಟಕ್ಕಿಂತ ದೀರ್ಘಕಾಲದ ಸಂಬಂಧ ಮುಖ್ಯ."], ["ಸ್ಥಳೀಯ ಜನ, ಸ್ಥಳೀಯ ಅರಿವು", "ಬೆಂಗಳೂರಿನ ಬಡಾವಣೆಗಳು, ಅಂಗಡಿ ಮಾಲೀಕರು ಮತ್ತು ಎಲ್ಲಿ ಏನು ಮಾರಾಟವಾಗುತ್ತದೆ ಎಂಬುದು ನಮ್ಮ ತಂಡಕ್ಕೆ ಗೊತ್ತು."]],
+    areasEyebrow: "ನಾವು ಎಲ್ಲಿಗೆ ತಲುಪಿಸುತ್ತೇವೆ",
+    areasTitle: "ಮೊದಲು ಬೆಂಗಳೂರು, ನಂತರ ಸಂಪೂರ್ಣ ಕರ್ನಾಟಕ",
+    areasLede: "ವರ್ತೂರಿನ ನಮ್ಮ ಕೇಂದ್ರದಿಂದ ಪೂರ್ವ ಮತ್ತು ದಕ್ಷಿಣ ಬೆಂಗಳೂರಿಗೆ ತ್ವರಿತ ಸಂಪರ್ಕ; ನಗರದಾದ್ಯಂತ ಮಾರ್ಗಗಳು ಮತ್ತು ರಾಜ್ಯವ್ಯಾಪಿ ಜಾಲ ವಿಸ್ತರಿಸುತ್ತಿದೆ.",
+  },
+}[lang];
+
+const heroImg = resolveImage("about-warehouse", "supreme-jal-range");
+const sideImg = resolveImage("beekay-flatlay");
+const valueIcons = ["clock", "shield", "handshake", "users"];
+const flowIcons = ["factory", "box", "truck", "store"];
+---
+<Base title={copy.title} description={copy.description}>
+  <PageHero eyebrow={copy.eyebrow} title={copy.h1} lede={copy.lede} image={heroImg} imageAlt={copy.heroAlt} crumbs={[{ href: "/about/", label: copy.title }]} />
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">{copy.storyEyebrow}</p>
+        <h2>{copy.storyTitle}</h2>
+        {copy.story.map((para) => <p>{para}</p>)}
+        <p class="kn about__kn" lang="kn">ಕರುನಾಡಿನ ಪ್ರತಿ ಅಂಗಡಿಗೂ — ನಂಬಿಕೆಯ ವಿತರಣೆ.</p>
+      </div>
+      {sideImg && (
+        <div class="media-frame about__img reveal">
+          <Img image={sideImg} alt={copy.sideAlt} sizes="(min-width: 900px) 45vw, 100vw" />
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section section--leaf">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">{copy.flowEyebrow}</p>
+        <h2>{copy.flowTitle}</h2>
+        <p class="lede">{copy.flowLede}</p>
+      </div>
+      <ol class="flow reveal">
+        {copy.flow.map(([title, text], i) => (
+          <li>
+            <span class="flow__icon"><Icon name={flowIcons[i]} size={28} /></span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head head--center reveal">
+        <p class="eyebrow">{copy.valuesEyebrow}</p>
+        <h2>{copy.valuesTitle}</h2>
+      </div>
+      <div class="grid grid-4 values">
+        {copy.values.map(([title, text], i) => (
+          <article class="value reveal">
+            <span class="value__icon"><Icon name={valueIcons[i]} size={26} /></span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">{copy.areasEyebrow}</p>
+        <h2>{copy.areasTitle}</h2>
+        <p class="lede">{copy.areasLede}</p>
+        <ul class="areas">
+          {site.serviceAreas[lang].map((a) => <li><Icon name="pin" size={16} /> {a}</li>)}
+        </ul>
+      </div>
+      <div class="statbox reveal">
+        {site.stats.map((st) => (
+          <div><strong>{st.value[lang]}</strong><span>{st.label[lang]}</span></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <VanBanner />
+  <CtaBand />
+</Base>
+
+<style>
+  .about__img { aspect-ratio: 4 / 5; max-height: 560px; }
+  .about__kn { font-weight: 700; color: var(--chilli); font-size: 1.1rem; }
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  @media (min-width: 900px) { .flow { grid-template-columns: repeat(4, 1fr); gap: 0; } }
+  .flow li { position: relative; padding: 20px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.14); }
+  @media (min-width: 900px) {
+    .flow li { border-radius: 0; border-right: 0; }
+    .flow li:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .flow li:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-right: 1px solid rgba(255, 255, 255, 0.14); }
+    .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -14px; top: 30px; z-index: 1; width: 28px; height: 28px; border-radius: 50%; background: var(--sun); color: var(--ink); display: grid; place-items: center; font-weight: 800; }
+  }
+  .flow__icon { width: 52px; height: 52px; border-radius: 14px; background: var(--sun); color: var(--ink); display: grid; place-items: center; margin-bottom: 12px; }
+  .flow h3 { margin-bottom: 4px; }
+  .flow p { margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 0.95rem; }
+  .values { grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .values { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .values { grid-template-columns: repeat(4, 1fr); } }
+  .value { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .value__icon { width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; background: var(--paper-2); color: var(--chilli); margin-bottom: 12px; }
+  .value p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .areas { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .areas li { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-weight: 600; font-size: 0.9rem; }
+  .areas :global(svg) { color: var(--chilli); }
+  .statbox { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .statbox div { background: var(--card); border-radius: var(--radius); padding: 22px 18px; border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; gap: 4px; }
+  .statbox strong { font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; color: var(--chilli); }
+  .statbox div:nth-child(2n) strong { color: var(--leaf-2); }
+  .statbox span { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+</style>

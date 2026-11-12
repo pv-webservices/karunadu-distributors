@@ -1,0 +1,42 @@
+---
+import Icon from "./Icon.astro";
+import Img from "./Img.astro";
+import { resolveImage } from "../lib/images";
+import { site, waLink } from "../data/site";
+import { getLang } from "../i18n";
+import { t } from "../i18n/ui";
+const van = resolveImage("delivery-van");
+const s = t(getLang(Astro.url));
+---
+<section class="van">
+  <div class="wrap van__grid">
+    <div class="van__text reveal">
+      <p class="eyebrow">{s.vanEyebrow}</p>
+      <h2>{s.vanTitleA} <span>{s.vanTitleB}</span></h2>
+      <p class="lede">{s.vanLede}</p>
+      <div class="btn-row">
+        <a class="btn btn--sun" href={waLink(s.vanWa)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {s.vanRequest}</a>
+        <a class="btn btn--ghost" href={`tel:${site.phones[0].tel}`}><Icon name="phone" /> {s.vanCall} {site.phones[0].display}</a>
+      </div>
+    </div>
+    {van && (
+      <figure class="van__media reveal">
+        <Img image={van} alt={s.vanAlt} sizes="(min-width: 900px) 50vw, 100vw" largeWidth={1280} smallWidth={720} />
+        <figcaption><Icon name="qr" size={18} /> {s.vanCaption}</figcaption>
+      </figure>
+    )}
+  </div>
+</section>
+
+<style>
+  .van { background: linear-gradient(135deg, #2a0e10 0%, #5a1218 45%, #1b1410 100%); color: #fff; padding: 56px 0; overflow: hidden; }
+  @media (min-width: 900px) { .van { padding: 88px 0; } }
+  .van__grid { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 900px) { .van__grid { grid-template-columns: 1fr 1.1fr; gap: 56px; } }
+  .van h2 span { color: var(--sun); }
+  .van .eyebrow { color: var(--sun); }
+  .van .lede { color: rgba(255, 255, 255, 0.82); }
+  .van__media { margin: 0; position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7); border: 4px solid var(--sun); }
+  .van__media :global(img) { width: 100%; aspect-ratio: 1280 / 736; object-fit: cover; }
+  .van__media figcaption { position: absolute; left: 12px; bottom: 12px; display: inline-flex; gap: 6px; align-items: center; background: rgba(29, 22, 17, 0.85); padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+</style>

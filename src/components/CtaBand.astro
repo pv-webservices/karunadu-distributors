@@ -1,0 +1,32 @@
+---
+import Icon from "./Icon.astro";
+import { getLang, lp } from "../i18n";
+import { t } from "../i18n/ui";
+interface Props { title?: string; text?: string; }
+const lang = getLang(Astro.url);
+const s = t(lang);
+const { title = s.ctaTitle, text = s.ctaText } = Astro.props;
+---
+<section class="cta">
+  <div class="wrap cta__inner reveal">
+    <div>
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--sun" href={lp(lang, "/retailers/")}><Icon name="store" /> {s.imRetailer}</a>
+      <a class="btn btn--ghost" href={lp(lang, "/manufacturers/")}><Icon name="factory" /> {s.imBrand}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { background: var(--leaf); color: #fff; padding: 48px 0; position: relative; overflow: hidden; }
+  .cta::after { content: ""; position: absolute; right: -60px; top: -60px; width: 260px; height: 260px; border-radius: 50%; border: 40px solid rgba(255, 198, 26, 0.16); }
+  .cta__inner { display: grid; gap: 20px; align-items: center; position: relative; z-index: 1; }
+  @media (min-width: 900px) { .cta__inner { grid-template-columns: 1.4fr auto; gap: 40px; } .cta { padding: 64px 0; } }
+  .cta h2 { margin-bottom: 8px; }
+  .cta p { margin: 0; color: rgba(255, 255, 255, 0.82); max-width: 56ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  @media (max-width: 479px) { .cta__actions .btn { flex: 1 1 100%; } }
+</style>

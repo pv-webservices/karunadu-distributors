@@ -1,0 +1,61 @@
+---
+// Inner-page hero: title block + optional image. Compact on mobile.
+import Img from "./Img.astro";
+import type { ResolvedImage } from "../lib/images";
+import { getLang, lp } from "../i18n";
+import { t } from "../i18n/ui";
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  image?: ResolvedImage | null;
+  imageAlt?: string;
+  crumbs?: Array<{ href: string; label: string }>;
+}
+const { eyebrow, title, lede, image, imageAlt = "", crumbs = [] } = Astro.props;
+const lang = getLang(Astro.url);
+const s = t(lang);
+---
+<section class="phero">
+  <div class="wrap phero__grid">
+    <div class="phero__text">
+      {crumbs.length > 0 && (
+        <nav class="crumbs" aria-label={s.breadcrumb}>
+          <ol>
+            <li><a href={lp(lang, "/")}>{s.home}</a></li>
+            {crumbs.map((c, i) => <li><a href={lp(lang, c.href)} aria-current={i === crumbs.length - 1 ? "page" : undefined}>{c.label}</a></li>)}
+          </ol>
+        </nav>
+      )}
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="lede">{lede}</p>
+      <slot />
+    </div>
+    {image && (
+      <div class="phero__media media-frame">
+        <Img image={image} alt={imageAlt} eager sizes="(min-width: 900px) 45vw, 100vw" largeWidth={1600} smallWidth={800} />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .phero {
+    padding: 24px 0 40px;
+    background:
+      radial-gradient(1200px 400px at 100% 0%, rgba(255, 198, 26, 0.22), transparent 60%),
+      radial-gradient(800px 300px at 0% 100%, rgba(207, 31, 42, 0.08), transparent 60%),
+      var(--paper);
+  }
+  @media (min-width: 900px) { .phero { padding: 56px 0 72px; } }
+  .phero__grid { display: grid; gap: 24px; align-items: center; }
+  @media (min-width: 900px) { .phero__grid { grid-template-columns: 1.1fr 1fr; gap: 56px; } }
+  .phero h1 { font-size: clamp(2rem, 6.5vw, 3.6rem); }
+  .phero__media { aspect-ratio: 3 / 2; }
+  .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 14px; font-size: 0.85rem; color: var(--muted); }
+  .crumbs li + li::before { content: "/"; margin-right: 6px; opacity: 0.5; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .crumbs a[aria-current="page"] { color: var(--ink); font-weight: 600; }
+</style>

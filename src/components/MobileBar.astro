@@ -1,0 +1,75 @@
+---
+import Icon from "./Icon.astro";
+import { site, waLink } from "../data/site";
+import { getLang, lp } from "../i18n";
+import { t } from "../i18n/ui";
+const lang = getLang(Astro.url);
+const s = t(lang);
+---
+<nav class="mbar" aria-label={s.quickActions}>
+  <a href={`tel:${site.phones[0].tel}`} class="mbar__item">
+    <Icon name="phone" size={22} /><span>{s.call}</span>
+  </a>
+  <a href={waLink(s.waStock)} target="_blank" rel="noopener" class="mbar__item mbar__item--wa">
+    <Icon name="whatsapp" size={24} /><span>{s.whatsapp}</span>
+  </a>
+  <a href={lp(lang, "/products/")} class="mbar__item">
+    <Icon name="box" size={22} /><span>{s.products}</span>
+  </a>
+  <button type="button" class="mbar__item" data-open-order>
+    <span class="mbar__icon"><Icon name="list" size={22} /><span class="mbar__badge" data-order-count hidden>0</span></span>
+    <span>{s.orderList}</span>
+  </button>
+</nav>
+
+<a class="to-top" href="#top" aria-label={s.backToTop} data-to-top>
+  <Icon name="arrow" size={22} />
+</a>
+
+<script>
+  const toTop = document.querySelector<HTMLAnchorElement>("[data-to-top]");
+  if (toTop) {
+    const SHOW_AFTER_PX = 600;
+    const onScroll = () => toTop.classList.toggle("is-on", window.scrollY > SHOW_AFTER_PX);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    toTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    });
+  }
+</script>
+
+<style>
+  .to-top {
+    position: fixed; right: 16px; bottom: calc(var(--mobilebar-h) + 16px + env(safe-area-inset-bottom)); z-index: 59;
+    width: 46px; height: 46px; border-radius: 999px; display: grid; place-items: center;
+    background: var(--ink); color: #fff; box-shadow: var(--shadow-lg);
+    opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+  }
+  .to-top :global(svg) { transform: rotate(-90deg); }
+  .to-top.is-on { opacity: 1; transform: none; pointer-events: auto; }
+  @media (min-width: 1024px) { .to-top { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
+
+  .mbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    height: calc(var(--mobilebar-h) + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
+    background: var(--card); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(29, 22, 17, 0.4);
+  }
+  @media (min-width: 1024px) { .mbar { display: none; } }
+  .mbar__item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    border: 0; background: none; text-decoration: none; font-size: 0.74rem; font-weight: 700; color: var(--ink-2); cursor: pointer;
+    line-height: 1.2; text-align: center; padding: 0 2px;
+  }
+  :lang(kn) .mbar__item { font-size: 0.72rem; }
+  .mbar__item:active { background: var(--paper-2); }
+  .mbar__item--wa { color: #fff; background: var(--wa); margin: 8px 4px; border-radius: 16px; }
+  .mbar__item--wa:active { background: #189749; }
+  .mbar__icon { position: relative; display: inline-flex; }
+  .mbar__badge { position: absolute; top: -6px; right: -10px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 999px; background: var(--chilli); color: #fff; font-size: 0.68rem; display: grid; place-items: center; }
+  .mbar__badge[hidden] { display: none; }
+</style>

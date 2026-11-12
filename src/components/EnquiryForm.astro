@@ -1,0 +1,154 @@
+---
+// WhatsApp enquiry forms for retailers and brands. mode="both" shows tabs.
+import Icon from "./Icon.astro";
+import { categories, catName } from "../data/catalog";
+import { site } from "../data/site";
+import { getLang } from "../i18n";
+import { t } from "../i18n/ui";
+
+interface Props { mode?: "retailer" | "manufacturer" | "both"; initial?: "retailer" | "manufacturer"; }
+const { mode = "both", initial = "retailer" } = Astro.props;
+const lang = getLang(Astro.url);
+const s = t(lang);
+const showRetailer = mode !== "manufacturer";
+const showMaker = mode !== "retailer";
+const uid = Math.random().toString(36).slice(2, 7);
+const id = (s: string) => `${s}-${uid}`;
+---
+<div class="eform" data-eform>
+  {mode === "both" && (
+    <div class="eform__tabs" role="tablist" aria-label={s.enquiryType}>
+      <button type="button" role="tab" id={id("tab-r")} aria-controls={id("panel-r")} aria-selected={initial === "retailer" ? "true" : "false"} data-tab="r">
+        <Icon name="store" size={20} /> {s.tabShop}
+      </button>
+      <button type="button" role="tab" id={id("tab-m")} aria-controls={id("panel-m")} aria-selected={initial === "manufacturer" ? "true" : "false"} data-tab="m">
+        <Icon name="factory" size={20} /> {s.tabBrand}
+      </button>
+    </div>
+  )}
+
+  {showRetailer && (
+    <form class="eform__panel" id={id("panel-r")} role={mode === "both" ? "tabpanel" : undefined} aria-labelledby={mode === "both" ? id("tab-r") : undefined}
+      data-wa-form data-panel="r" data-intro={s.rIntro} novalidate hidden={mode === "both" && initial !== "retailer"}>
+      <div class="eform__head">
+        <span class="eform__icon eform__icon--sun"><Icon name="store" /></span>
+        <div>
+          <h3>{s.rTitle}</h3>
+          <p>{s.rText}</p>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for={id("r-shop")}>{s.shopName} *</label><input id={id("r-shop")} name="shop" required maxlength="80" autocomplete="organization" placeholder={s.shopPh} /></div>
+        <div class="field"><label for={id("r-name")}>{s.ownerName} *</label><input id={id("r-name")} name="name" required maxlength="60" autocomplete="name" placeholder={s.ownerPh} /></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for={id("r-phone")}>{s.mobileWa} *</label><input id={id("r-phone")} name="phone" type="tel" inputmode="tel" required maxlength="16" autocomplete="tel" placeholder={s.mobilePh} /></div>
+        <div class="field"><label for={id("r-area")}>{s.areaLocality} *</label><input id={id("r-area")} name="area" required maxlength="80" placeholder={s.areaPhLong} /></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for={id("r-type")}>{s.storeType}</label>
+          <select id={id("r-type")} name="type">
+            {s.storeTypes.map((o) => <option>{o}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for={id("r-cat")}>{s.interestedIn}</label>
+          <select id={id("r-cat")} name="category">
+            <option>{s.allCategories}</option>
+            {categories.map((c) => <option>{catName(c, lang)}</option>)}
+          </select>
+        </div>
+      </div>
+      <button class="btn btn--wa btn--block" type="submit"><Icon name="whatsapp" /> {s.rSend}</button>
+      <p class="eform__done" data-form-done hidden><Icon name="check" size={18} /> {s.formDone}</p>
+    </form>
+  )}
+
+  {showMaker && (
+    <form class="eform__panel" id={id("panel-m")} role={mode === "both" ? "tabpanel" : undefined} aria-labelledby={mode === "both" ? id("tab-m") : undefined}
+      data-wa-form data-panel="m" data-intro={s.mIntro} novalidate hidden={mode === "both" && initial !== "manufacturer"}>
+      <div class="eform__head">
+        <span class="eform__icon eform__icon--leaf"><Icon name="factory" /></span>
+        <div>
+          <h3>{s.mTitle}</h3>
+          <p>{s.mText}</p>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for={id("m-company")}>{s.company} *</label><input id={id("m-company")} name="company" required maxlength="80" autocomplete="organization" placeholder={s.companyPh} /></div>
+        <div class="field"><label for={id("m-name")}>{s.contactPerson} *</label><input id={id("m-name")} name="name" required maxlength="60" autocomplete="name" placeholder={s.contactPh} /></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for={id("m-phone")}>{s.mobileWa} *</label><input id={id("m-phone")} name="phone" type="tel" inputmode="tel" required maxlength="16" autocomplete="tel" placeholder={s.mobilePh} /></div>
+        <div class="field"><label for={id("m-email")}>{s.email}</label><input id={id("m-email")} name="email" type="email" maxlength="80" autocomplete="email" placeholder={s.emailPh} /></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for={id("m-cat")}>{s.productCategory} *</label>
+          <select id={id("m-cat")} name="category" required>
+            <option value="">{s.selectCategory}</option>
+            {categories.map((c) => <option>{catName(c, lang)}</option>)}
+            <option>{s.otherFmcg}</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for={id("m-need")}>{s.lookingFor}</label>
+          <select id={id("m-need")} name="need">
+            {s.needs.map((o) => <option>{o}</option>)}
+          </select>
+        </div>
+      </div>
+      <div class="field"><label for={id("m-msg")}>{s.aboutProducts}</label><textarea id={id("m-msg")} name="message" rows="3" maxlength="500" placeholder={s.aboutPh}></textarea></div>
+      <button class="btn btn--leaf btn--block" type="submit"><Icon name="whatsapp" /> {s.mSend}</button>
+      <p class="eform__done" data-form-done hidden><Icon name="check" size={18} /> {s.formDone}</p>
+    </form>
+  )}
+  <p class="eform__alt">{s.preferEmail} <a href={`mailto:${site.email}`}>{site.email}</a></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-eform]").forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+    const select = (key: string, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === key;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      root.querySelectorAll<HTMLElement>("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== key));
+    };
+    tabs.forEach((t, i) => {
+      t.tabIndex = t.getAttribute("aria-selected") === "true" ? 0 : -1;
+      t.addEventListener("click", () => select(t.dataset.tab ?? "r"));
+      t.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        select(next.dataset.tab ?? "r", true);
+      });
+    });
+    const hash = window.location.hash;
+    if (hash === "#brand" || hash === "#manufacturer") select("m");
+  });
+</script>
+
+<style>
+  .eform { background: var(--card); border-radius: 22px; border: 1px solid var(--line); box-shadow: var(--shadow-lg); padding: 16px; }
+  @media (min-width: 640px) { .eform { padding: 28px; } }
+  .eform__tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--paper-2); border-radius: 16px; margin-bottom: 20px; }
+  .eform__tabs button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; border: 0; border-radius: 12px; background: transparent; font-weight: 700; cursor: pointer; color: var(--ink-2); }
+  .eform__tabs button[aria-selected="true"] { background: var(--ink); color: #fff; box-shadow: var(--shadow); }
+  .eform__panel { display: grid; gap: 14px; }
+  .eform__panel[hidden] { display: none; }
+  .eform__head { display: flex; gap: 14px; align-items: flex-start; padding-bottom: 14px; border-bottom: 1px dashed var(--line); margin-bottom: 4px; }
+  .eform__head h3 { margin: 0 0 2px; }
+  .eform__head p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+  .eform__icon { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; }
+  .eform__icon--sun { background: var(--sun); }
+  .eform__icon--leaf { background: var(--leaf-soft); color: var(--leaf); }
+  .eform__done { display: flex; align-items: center; gap: 8px; justify-content: center; color: var(--leaf-2); font-weight: 700; margin: 0; }
+  .eform__done[hidden] { display: none; }
+  .eform__alt { text-align: center; font-size: 0.88rem; color: var(--muted); margin: 14px 0 0; }
+  .eform__alt a { color: var(--ink); font-weight: 600; }
+</style>

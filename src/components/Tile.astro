@@ -1,0 +1,21 @@
+---
+// Illustrated fallback used when a product line has no photo yet.
+import Icon from "./Icon.astro";
+interface Props { icon: string; tone: string; label?: string; }
+const { icon, tone, label } = Astro.props;
+---
+<div class={`tile tile--${tone}`} role="img" aria-label={label ?? ""}>
+  <span class="tile__ring"><Icon name={icon} size={44} /></span>
+</div>
+<style>
+  .tile { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+  .tile::before { content: ""; position: absolute; inset: 0; opacity: .5;
+    background-image: radial-gradient(currentColor 1px, transparent 1.4px); background-size: 14px 14px; color: rgba(255,255,255,.35); }
+  .tile__ring { position: relative; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(255,255,255,.9); color: var(--ink); box-shadow: 0 10px 30px -10px rgba(0,0,0,.35); }
+  .tile--red { background: linear-gradient(150deg, #e2414a, var(--chilli-deep)); }
+  .tile--yellow { background: linear-gradient(150deg, #ffd54d, var(--sun-deep)); }
+  .tile--green { background: linear-gradient(150deg, #1fa05b, var(--leaf)); }
+  .tile--orange { background: linear-gradient(150deg, #ffa646, #d9650b); }
+  .tile--plum { background: linear-gradient(150deg, #a1416f, #5a1d3d); }
+</style>

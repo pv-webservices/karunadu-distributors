@@ -1,0 +1,375 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Img from "../components/Img.astro";
+import CategoryCard from "../components/CategoryCard.astro";
+import ProductCard from "../components/ProductCard.astro";
+import VanBanner from "../components/VanBanner.astro";
+import EnquiryForm from "../components/EnquiryForm.astro";
+import { site, waLink } from "../data/site";
+import { categories, products, brands } from "../data/catalog";
+import { resolveImage } from "../lib/images";
+import { getLang, lp } from "../i18n";
+
+const lang = getLang(Astro.url);
+const copy = {
+  en: {
+    title: "Home",
+    pill: "Bengaluru & all Karnataka",
+    h1: ["Connecting brands to ", "every store", ""],
+    lede: "Bengaluru's trusted distribution partner for <strong>food, beverage and FMCG brands</strong> — bridging national and regional manufacturers with local retail shelves through reliable, on-time delivery.",
+    ctaShop: "I run a retail shop",
+    ctaBrand: "I'm a brand / manufacturer",
+    altLine: { lang: "kn", text: `${site.nameKn} — ಪ್ರತಿ ಅಂಗಡಿಗೆ ಬ್ರ್ಯಾಂಡ್‌ಗಳನ್ನು ತಲುಪಿಸುತ್ತೇವೆ` },
+    heroAlt: "Karunadu Distributors delivery vehicle loaded with beverage and FMCG stock",
+    cardTitle: "Express delivery",
+    cardText: "24–48 hr replenishment across Bengaluru",
+    statsAria: "Key numbers",
+    audEyebrow: "Who we work with",
+    audTitle: "One bridge, two kinds of partners",
+    audLede: "We sit between the factory gate and the shop counter — so manufacturers grow their reach and retailers never run short of what sells.",
+    retail: {
+      title: "For retail shops",
+      text: "Kirana stores, supermarkets, bakeries, cafés and wholesalers across Bengaluru.",
+      ticks: [["Order on WhatsApp", "No apps or complex software — just send your list."], ["Fast-moving stock", "Juices, sodas, snacks, spices and more from trusted brands."], ["Fair retailer margins", "Competitive pricing that protects your profit."]],
+      btn: "How ordering works",
+    },
+    brand: {
+      title: "For brands & manufacturers",
+      text: "Emerging and established food, beverage and FMCG producers looking to scale in Karnataka.",
+      ticks: [["Ready retail network", "500+ active outlets, from neighbourhood kiranas to supermarkets."], ["Brand visibility", "Branded vans and in-store push for your campaigns."], ["Hassle-free onboarding", "Simple terms and a dedicated point of contact."]],
+      btn: "Partner with us",
+    },
+    catEyebrow: "What we distribute",
+    catTitle: "Five categories, 18 product lines",
+    catLede: "From cooler-shelf beverages to bakery ingredients — one distributor for everything your counter needs.",
+    catAll: "See the full catalogue",
+    catAllCount: `${products.length} products from ${brands.length} brands`,
+    featEyebrow: "Bestsellers",
+    featTitle: "Popular with Bengaluru retailers",
+    featLede: "Tap <strong>Add to order</strong> to build your list, then send it to us on WhatsApp in one go.",
+    allProducts: "All products",
+    stepsEyebrow: "Simple ordering",
+    stepsTitle: "From WhatsApp to your shelf",
+    steps: [["Pick your products", "Browse the catalogue or ask us for the latest price list."], ["Send on WhatsApp", "Share your order list with shop name and area — that's it."], ["We confirm", "Our team confirms stock, pricing and a delivery slot."], ["Delivered in 24–48 hrs", "Our vans deliver to your doorstep across Bengaluru."]],
+    brandsEyebrow: "Brands we carry",
+    brandsTitle: "Trusted names, steady demand",
+    campEyebrow: "Brand campaigns",
+    campTitle: "We push your campaigns to the shelf",
+    campLede: "Festive offers, cashback schemes and seasonal pushes from our partner brands reach retailers through our sales team and WhatsApp network.",
+    campAria: "Partner brand campaign posters",
+    posterAlts: ["Tusk soft drinks ₹50 cashback campaign poster", "Beekay Juicee kulki juice store campaign poster", "Beekay Juicee Independence Day campaign poster", "Beekay Juicee Eid al-Adha campaign poster"],
+    enqEyebrow: "Get in touch",
+    enqTitle: "Tell us what you need",
+    enqLede: "Choose your requirement and we'll open WhatsApp with your details filled in. Our team usually replies within a few working hours.",
+    callUs: "Call us",
+    emailLabel: "Email",
+    hoursLabel: "Hours",
+    quickWa: "Quick WhatsApp chat",
+    waHi: "Hello Karunadu Distributors!",
+  },
+  kn: {
+    title: "ಮುಖಪುಟ",
+    pill: "ಬೆಂಗಳೂರು & ಸಂಪೂರ್ಣ ಕರ್ನಾಟಕ",
+    h1: ["", "ಪ್ರತಿ ಅಂಗಡಿಗೂ", " ಬ್ರ್ಯಾಂಡ್‌ಗಳ ಸಂಪರ್ಕ"],
+    lede: "<strong>ಆಹಾರ, ಪಾನೀಯ ಮತ್ತು FMCG ಬ್ರ್ಯಾಂಡ್‌ಗಳಿಗೆ</strong> ಬೆಂಗಳೂರಿನ ನಂಬಿಕೆಯ ವಿತರಣಾ ಪಾಲುದಾರರು — ರಾಷ್ಟ್ರೀಯ ಮತ್ತು ಪ್ರಾದೇಶಿಕ ತಯಾರಕರನ್ನು ಸ್ಥಳೀಯ ಅಂಗಡಿಗಳ ಶೆಲ್ಫ್‌ಗಳೊಂದಿಗೆ ಸಮಯಕ್ಕೆ ಸರಿಯಾದ ಡೆಲಿವರಿ ಮೂಲಕ ಜೋಡಿಸುತ್ತೇವೆ.",
+    ctaShop: "ನನ್ನ ಅಂಗಡಿ ಇದೆ",
+    ctaBrand: "ನಾನು ಬ್ರ್ಯಾಂಡ್ / ತಯಾರಕ",
+    altLine: { lang: "en", text: `${site.name} — Connecting brands to every store` },
+    heroAlt: "ಪಾನೀಯ ಮತ್ತು FMCG ಸ್ಟಾಕ್ ತುಂಬಿದ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಡೆಲಿವರಿ ವಾಹನ",
+    cardTitle: "ಎಕ್ಸ್‌ಪ್ರೆಸ್ ಡೆಲಿವರಿ",
+    cardText: "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ 24–48 ಗಂಟೆಗಳಲ್ಲಿ ಮರುಪೂರೈಕೆ",
+    statsAria: "ಮುಖ್ಯ ಅಂಕಿಅಂಶಗಳು",
+    audEyebrow: "ನಾವು ಯಾರೊಂದಿಗೆ ಕೆಲಸ ಮಾಡುತ್ತೇವೆ",
+    audTitle: "ಒಂದು ಸೇತುವೆ, ಎರಡು ಬಗೆಯ ಪಾಲುದಾರರು",
+    audLede: "ಕಾರ್ಖಾನೆಯಿಂದ ಅಂಗಡಿಯ ಕೌಂಟರ್‌ವರೆಗೆ ನಾವು ಸೇತುವೆ — ತಯಾರಕರ ಮಾರುಕಟ್ಟೆ ಬೆಳೆಯುತ್ತದೆ, ಅಂಗಡಿಗಳಲ್ಲಿ ಮಾರಾಟವಾಗುವ ಸ್ಟಾಕ್ ಎಂದಿಗೂ ಖಾಲಿಯಾಗುವುದಿಲ್ಲ.",
+    retail: {
+      title: "ಚಿಲ್ಲರೆ ಅಂಗಡಿಗಳಿಗೆ",
+      text: "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ಕಿರಾಣಿ ಅಂಗಡಿಗಳು, ಸೂಪರ್‌ಮಾರ್ಕೆಟ್‌ಗಳು, ಬೇಕರಿಗಳು, ಕೆಫೆಗಳು ಮತ್ತು ಸಗಟು ವ್ಯಾಪಾರಿಗಳು.",
+      ticks: [["ವಾಟ್ಸಾಪ್‌ನಲ್ಲೇ ಆರ್ಡರ್", "ಆ್ಯಪ್ ಅಥವಾ ಕಷ್ಟದ ಸಾಫ್ಟ್‌ವೇರ್ ಬೇಡ — ನಿಮ್ಮ ಪಟ್ಟಿ ಕಳುಹಿಸಿದರೆ ಸಾಕು."], ["ವೇಗವಾಗಿ ಮಾರಾಟವಾಗುವ ಸ್ಟಾಕ್", "ನಂಬಿಕೆಯ ಬ್ರ್ಯಾಂಡ್‌ಗಳ ಜ್ಯೂಸ್, ಸೋಡಾ, ಸ್ನ್ಯಾಕ್ಸ್, ಮಸಾಲೆ ಮತ್ತು ಇನ್ನಷ್ಟು."], ["ನ್ಯಾಯಯುತ ಲಾಭಾಂಶ", "ನಿಮ್ಮ ಲಾಭ ಕಾಪಾಡುವ ಸ್ಪರ್ಧಾತ್ಮಕ ಬೆಲೆ."]],
+      btn: "ಆರ್ಡರ್ ಮಾಡುವ ವಿಧಾನ",
+    },
+    brand: {
+      title: "ಬ್ರ್ಯಾಂಡ್ & ತಯಾರಕರಿಗೆ",
+      text: "ಕರ್ನಾಟಕದಲ್ಲಿ ಮಾರುಕಟ್ಟೆ ವಿಸ್ತರಿಸಲು ಬಯಸುವ ಹೊಸ ಮತ್ತು ಸ್ಥಾಪಿತ ಆಹಾರ, ಪಾನೀಯ ಹಾಗೂ FMCG ತಯಾರಕರು.",
+      ticks: [["ಸಿದ್ಧ ಅಂಗಡಿ ಜಾಲ", "ನೆರೆಹೊರೆಯ ಕಿರಾಣಿಯಿಂದ ಸೂಪರ್‌ಮಾರ್ಕೆಟ್‌ವರೆಗೆ 500+ ಸಕ್ರಿಯ ಅಂಗಡಿಗಳು."], ["ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರ", "ಬ್ರ್ಯಾಂಡೆಡ್ ವ್ಯಾನ್‌ಗಳು ಮತ್ತು ಅಂಗಡಿಗಳಲ್ಲಿ ನಿಮ್ಮ ಆಫರ್‌ಗಳ ಪ್ರಚಾರ."], ["ಸುಲಭ ಸೇರ್ಪಡೆ", "ಸರಳ ಷರತ್ತುಗಳು ಮತ್ತು ಒಬ್ಬ ಮೀಸಲು ಸಂಪರ್ಕ ವ್ಯಕ್ತಿ."]],
+      btn: "ನಮ್ಮ ಪಾಲುದಾರರಾಗಿ",
+    },
+    catEyebrow: "ನಾವು ವಿತರಿಸುವುದು",
+    catTitle: "ಐದು ವಿಭಾಗಗಳು, 18 ಉತ್ಪನ್ನ ಶ್ರೇಣಿಗಳು",
+    catLede: "ಕೂಲರ್ ಪಾನೀಯಗಳಿಂದ ಬೇಕರಿ ಸಾಮಗ್ರಿಗಳವರೆಗೆ — ನಿಮ್ಮ ಕೌಂಟರ್‌ಗೆ ಬೇಕಾದ ಎಲ್ಲದಕ್ಕೂ ಒಬ್ಬರೇ ವಿತರಕರು.",
+    catAll: "ಪೂರ್ಣ ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ",
+    catAllCount: `${brands.length} ಬ್ರ್ಯಾಂಡ್‌ಗಳ ${products.length} ಉತ್ಪನ್ನಗಳು`,
+    featEyebrow: "ಹೆಚ್ಚು ಮಾರಾಟವಾಗುವವು",
+    featTitle: "ಬೆಂಗಳೂರಿನ ಅಂಗಡಿಗಳ ಮೆಚ್ಚಿನವು",
+    featLede: "<strong>ಆರ್ಡರ್‌ಗೆ ಸೇರಿಸಿ</strong> ಒತ್ತಿ ನಿಮ್ಮ ಪಟ್ಟಿ ತಯಾರಿಸಿ, ನಂತರ ಒಂದೇ ಬಾರಿಗೆ ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಕಳುಹಿಸಿ.",
+    allProducts: "ಎಲ್ಲ ಉತ್ಪನ್ನಗಳು",
+    stepsEyebrow: "ಸುಲಭ ಆರ್ಡರ್",
+    stepsTitle: "ವಾಟ್ಸಾಪ್‌ನಿಂದ ನಿಮ್ಮ ಶೆಲ್ಫ್‌ಗೆ",
+    steps: [["ಉತ್ಪನ್ನ ಆಯ್ಕೆ ಮಾಡಿ", "ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ ಅಥವಾ ಇತ್ತೀಚಿನ ಬೆಲೆ ಪಟ್ಟಿ ಕೇಳಿ."], ["ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಕಳುಹಿಸಿ", "ಅಂಗಡಿ ಹೆಸರು ಮತ್ತು ಪ್ರದೇಶದೊಂದಿಗೆ ಆರ್ಡರ್ ಪಟ್ಟಿ ಕಳುಹಿಸಿ — ಅಷ್ಟೇ."], ["ನಾವು ಖಚಿತಪಡಿಸುತ್ತೇವೆ", "ಸ್ಟಾಕ್, ಬೆಲೆ ಮತ್ತು ಡೆಲಿವರಿ ಸಮಯವನ್ನು ನಮ್ಮ ತಂಡ ಖಚಿತಪಡಿಸುತ್ತದೆ."], ["24–48 ಗಂಟೆಗಳಲ್ಲಿ ಡೆಲಿವರಿ", "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ನಮ್ಮ ವ್ಯಾನ್‌ಗಳು ನಿಮ್ಮ ಅಂಗಡಿ ಬಾಗಿಲಿಗೆ ತಲುಪಿಸುತ್ತವೆ."]],
+    brandsEyebrow: "ನಮ್ಮಲ್ಲಿರುವ ಬ್ರ್ಯಾಂಡ್‌ಗಳು",
+    brandsTitle: "ನಂಬಿಕೆಯ ಹೆಸರುಗಳು, ನಿರಂತರ ಬೇಡಿಕೆ",
+    campEyebrow: "ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರಗಳು",
+    campTitle: "ನಿಮ್ಮ ಪ್ರಚಾರಗಳನ್ನು ಶೆಲ್ಫ್‌ವರೆಗೆ ತಲುಪಿಸುತ್ತೇವೆ",
+    campLede: "ಪಾಲುದಾರ ಬ್ರ್ಯಾಂಡ್‌ಗಳ ಹಬ್ಬದ ಆಫರ್‌ಗಳು, ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಯೋಜನೆಗಳು ಮತ್ತು ಋತುಮಾನದ ಪ್ರಚಾರಗಳು ನಮ್ಮ ಮಾರಾಟ ತಂಡ ಮತ್ತು ವಾಟ್ಸಾಪ್ ಜಾಲದ ಮೂಲಕ ಅಂಗಡಿಗಳಿಗೆ ತಲುಪುತ್ತವೆ.",
+    campAria: "ಪಾಲುದಾರ ಬ್ರ್ಯಾಂಡ್‌ಗಳ ಪ್ರಚಾರ ಪೋಸ್ಟರ್‌ಗಳು",
+    posterAlts: ["ಟಸ್ಕ್ ಸಾಫ್ಟ್ ಡ್ರಿಂಕ್ಸ್ ₹50 ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಪ್ರಚಾರ ಪೋಸ್ಟರ್", "ಬೀಕೇ ಜ್ಯೂಸೀ ಕುಲ್ಕಿ ಜ್ಯೂಸ್ ಪ್ರಚಾರ ಪೋಸ್ಟರ್", "ಬೀಕೇ ಜ್ಯೂಸೀ ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಪೋಸ್ಟರ್", "ಬೀಕೇ ಜ್ಯೂಸೀ ಬಕ್ರೀದ್ ಶುಭಾಶಯ ಪೋಸ್ಟರ್"],
+    enqEyebrow: "ಸಂಪರ್ಕಿಸಿ",
+    enqTitle: "ನಿಮಗೆ ಏನು ಬೇಕು ತಿಳಿಸಿ",
+    enqLede: "ನಿಮ್ಮ ಅಗತ್ಯ ಆಯ್ಕೆ ಮಾಡಿ — ನಿಮ್ಮ ವಿವರಗಳೊಂದಿಗೆ ವಾಟ್ಸಾಪ್ ತೆರೆಯುತ್ತದೆ. ಸಾಮಾನ್ಯವಾಗಿ ಕೆಲವೇ ಕೆಲಸದ ಗಂಟೆಗಳಲ್ಲಿ ನಮ್ಮ ತಂಡ ಉತ್ತರಿಸುತ್ತದೆ.",
+    callUs: "ಕರೆ ಮಾಡಿ",
+    emailLabel: "ಇಮೇಲ್",
+    hoursLabel: "ಸಮಯ",
+    quickWa: "ತಕ್ಷಣ ವಾಟ್ಸಾಪ್ ಚಾಟ್",
+    waHi: "ನಮಸ್ಕಾರ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್!",
+  },
+}[lang];
+
+const hero = resolveImage("hero-distribution", "delivery-van");
+const featured = products.filter((p) => p.featured).slice(0, 8);
+const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-independence", "poster-beekay-eid"]
+  .map((id, i) => ({ id, alt: copy.posterAlts[i], image: resolveImage(id) }))
+  .filter((p) => p.image);
+---
+<Base title={copy.title}>
+  <section class="hero">
+    <div class="wrap wrap--wide hero__grid">
+      <div class="hero__text">
+        <p class="hero__pill"><Icon name="pin" size={16} /> {copy.pill}</p>
+        <h1>{copy.h1[0]}<span class="hl">{copy.h1[1]}</span>{copy.h1[2]}</h1>
+        <p class="lede" set:html={copy.lede} />
+        <div class="hero__cta">
+          <a class="btn btn--red" href={lp(lang, "/retailers/")}><Icon name="store" /> {copy.ctaShop}</a>
+          <a class="btn btn--ghost" href={lp(lang, "/manufacturers/")}><Icon name="factory" /> {copy.ctaBrand}</a>
+        </div>
+        <p class="hero__kn" lang={copy.altLine.lang}>{copy.altLine.text}</p>
+      </div>
+      <div class="hero__visual">
+        {hero && (
+          <div class="hero__img">
+            <Img image={hero} alt={copy.heroAlt} eager sizes="(min-width: 900px) 52vw, 100vw" largeWidth={hero.source === "generated" ? 1600 : 1280} smallWidth={hero.source === "generated" ? 800 : 720} />
+          </div>
+        )}
+        <div class="hero__card">
+          <span class="hero__card-icon"><Icon name="truck" size={26} /></span>
+          <div>
+            <strong>{copy.cardTitle}</strong>
+            <span>{copy.cardText}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats" aria-label={copy.statsAria}>
+    <div class="wrap stats__grid">
+      {site.stats.map((st) => (
+        <div class="stat">
+          <span class="stat__value">{st.value[lang]}</span>
+          <span class="stat__label">{st.label[lang]}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">{copy.audEyebrow}</p>
+        <h2>{copy.audTitle}</h2>
+        <p class="lede">{copy.audLede}</p>
+      </div>
+      <div class="grid grid-2">
+        <article class="aud aud--retail reveal">
+          <span class="aud__icon"><Icon name="store" size={28} /></span>
+          <h3>{copy.retail.title}</h3>
+          <p>{copy.retail.text}</p>
+          <ul class="ticks">
+            {copy.retail.ticks.map(([a, b]) => <li><span><strong>{a}</strong>{b}</span></li>)}
+          </ul>
+          <a class="btn btn--red" href={lp(lang, "/retailers/")}>{copy.retail.btn} <Icon name="arrow" /></a>
+        </article>
+        <article class="aud aud--brand reveal">
+          <span class="aud__icon"><Icon name="factory" size={28} /></span>
+          <h3>{copy.brand.title}</h3>
+          <p>{copy.brand.text}</p>
+          <ul class="ticks">
+            {copy.brand.ticks.map(([a, b]) => <li><span><strong>{a}</strong>{b}</span></li>)}
+          </ul>
+          <a class="btn btn--leaf" href={lp(lang, "/manufacturers/")}>{copy.brand.btn} <Icon name="arrow" /></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">{copy.catEyebrow}</p>
+        <h2>{copy.catTitle}</h2>
+        <p class="lede">{copy.catLede}</p>
+      </div>
+      <div class="grid grid-3 cats">
+        {categories.map((c, i) => <CategoryCard category={c} index={i} />)}
+        <a class="cats__all reveal" href={lp(lang, "/products/")}>
+          <Icon name="box" size={34} />
+          <strong>{copy.catAll}</strong>
+          <span>{copy.catAllCount} <Icon name="arrow" size={18} /></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head-row reveal">
+        <div class="head">
+          <p class="eyebrow">{copy.featEyebrow}</p>
+          <h2>{copy.featTitle}</h2>
+          <p class="lede" set:html={copy.featLede} />
+        </div>
+        <a class="textlink" href={lp(lang, "/products/")}>{copy.allProducts} <Icon name="arrow" /></a>
+      </div>
+      <div class="products-grid">
+        {featured.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="head head--center reveal">
+        <p class="eyebrow">{copy.stepsEyebrow}</p>
+        <h2>{copy.stepsTitle}</h2>
+      </div>
+      <ol class="steps reveal">
+        {copy.steps.map(([a, b]) => <li><h3>{a}</h3><p>{b}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head head--center reveal">
+        <p class="eyebrow">{copy.brandsEyebrow}</p>
+        <h2>{copy.brandsTitle}</h2>
+      </div>
+      <ul class="brands reveal" lang="en">
+        {brands.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  {posters.length > 0 && (
+    <section class="section section--ink campaigns">
+      <div class="wrap">
+        <div class="head reveal">
+          <p class="eyebrow">{copy.campEyebrow}</p>
+          <h2>{copy.campTitle}</h2>
+          <p class="lede">{copy.campLede}</p>
+        </div>
+      </div>
+      <ul class="posters" aria-label={copy.campAria}>
+        {posters.map((p) => (
+          <li><Img image={p.image!} alt={p.alt} sizes="(min-width: 900px) 22vw, 70vw" /></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <VanBanner />
+
+  <section class="section" id="enquiry">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">{copy.enqEyebrow}</p>
+        <h2>{copy.enqTitle}</h2>
+        <p class="lede">{copy.enqLede}</p>
+        <ul class="ticks">
+          <li><span><strong>{copy.callUs}</strong>{site.phones.map((p, i) => <>{i > 0 && " / "}<a href={`tel:${p.tel}`}>{p.display}</a></>)}</span></li>
+          <li><span><strong>{copy.emailLabel}</strong><a href={`mailto:${site.email}`}>{site.email}</a></span></li>
+          <li><span><strong>{copy.hoursLabel}</strong>{site.hours[lang]}</span></li>
+        </ul>
+        <a class="btn btn--wa enq-wa" href={waLink(copy.waHi)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {copy.quickWa}</a>
+      </div>
+      <div class="reveal"><EnquiryForm /></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; padding: 20px 0 36px; background:
+    radial-gradient(900px 500px at 85% 10%, rgba(255, 198, 26, 0.35), transparent 60%),
+    radial-gradient(700px 400px at 0% 90%, rgba(207, 31, 42, 0.1), transparent 60%), var(--paper); overflow: hidden; }
+  @media (min-width: 900px) { .hero { padding: 56px 0 80px; } }
+  .hero__grid { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 900px) { .hero__grid { grid-template-columns: 1fr 1.05fr; gap: 48px; } }
+  .hero__pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 0.8rem; font-weight: 700; color: var(--chilli); margin-bottom: 16px; }
+  .hero h1 { font-size: clamp(2.4rem, 9vw, 4.6rem); line-height: 0.98; letter-spacing: -0.035em; margin-bottom: 18px; }
+  .hl { color: var(--chilli); position: relative; white-space: nowrap; }
+  .hl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.02em; height: 0.16em; background: var(--sun); z-index: -1; border-radius: 4px; }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  @media (max-width: 479px) { .hero__cta .btn { flex: 1 1 100%; } }
+  .hero__kn { margin: 20px 0 0; font-size: 0.92rem; color: var(--leaf); font-weight: 600; }
+  .hero__visual { position: relative; }
+  .hero__img { border-radius: 22px; overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 3 / 2; border: 4px solid #fff; transform: rotate(0.6deg); }
+  .hero__img :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  /* Phones/tablets: a compact chip that only tucks under the photo's bottom edge. */
+  .hero__card { position: relative; z-index: 1; display: flex; gap: 10px; align-items: center; width: fit-content; max-width: calc(100% - 24px); margin: -18px auto 0; background: var(--card); padding: 8px 14px 8px 8px; border-radius: 14px; box-shadow: var(--shadow-lg); }
+  .hero__card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--sun); display: grid; place-items: center; flex: none; }
+  .hero__card-icon :global(svg) { width: 20px; height: 20px; }
+  .hero__card strong { display: block; font-family: var(--font-display); font-size: 0.92rem; line-height: 1.2; }
+  .hero__card span { display: block; font-size: 0.76rem; line-height: 1.3; color: var(--muted); }
+  /* Desktop: floats off the photo's corner, mostly outside the image. */
+  @media (min-width: 900px) {
+    .hero__card { position: absolute; left: -28px; bottom: -28px; margin: 0; gap: 12px; padding: 12px 18px 12px 12px; border-radius: 16px; max-width: 380px; }
+    .hero__card-icon { width: 46px; height: 46px; border-radius: 12px; }
+    .hero__card-icon :global(svg) { width: 26px; height: 26px; }
+    .hero__card strong { font-size: 1.05rem; }
+    .hero__card span { font-size: 0.85rem; }
+  }
+
+  .stats { background: var(--leaf); color: #fff; }
+  .stats__grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 900px) { .stats__grid { grid-template-columns: repeat(4, 1fr); } }
+  .stat { padding: 22px 8px; display: grid; gap: 2px; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.14); border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+  .stat:nth-child(2n) { border-right: 0; }
+  @media (min-width: 900px) { .stat { border-bottom: 0; padding: 30px 8px; } .stat:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.14); } .stat:last-child { border-right: 0; } }
+  .stat__value { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.4rem); color: var(--sun); line-height: 1.1; }
+  .stat__label { font-size: 0.86rem; opacity: 0.88; }
+
+  .aud { border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--line); }
+  @media (min-width: 768px) { .aud { padding: 34px; } }
+  .aud--retail { background: linear-gradient(160deg, #fff6d6, #fff 60%); }
+  .aud--brand { background: linear-gradient(160deg, var(--leaf-soft), #fff 60%); }
+  .aud__icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 8px; }
+  .aud--retail .aud__icon { background: var(--sun); }
+  .aud--brand .aud__icon { background: var(--leaf); color: #fff; }
+  .aud > p { color: var(--ink-2); }
+  .aud .ticks { margin: 6px 0 24px; }
+  .aud .btn { align-self: flex-start; margin-top: auto; }
+
+  .cats__all { display: grid; place-content: center; justify-items: center; gap: 8px; text-align: center; padding: 28px; border-radius: var(--radius); border: 2px dashed rgba(29, 22, 17, 0.25); text-decoration: none; color: var(--ink); min-height: 200px; transition: border-color 0.2s, background-color 0.2s; }
+  .cats__all:hover { border-color: var(--chilli); background: #fff; }
+  .cats__all strong { font-family: var(--font-display); font-size: 1.3rem; }
+  .cats__all span { display: inline-flex; align-items: center; gap: 6px; color: var(--chilli); font-weight: 700; }
+
+  .head-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; margin-bottom: 28px; }
+  .head-row .head { margin-bottom: 0; }
+
+  .brands { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .brands li { font-family: var(--font-display); font-weight: 700; font-size: clamp(1rem, 2.6vw, 1.25rem); padding: 10px 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .brands li:nth-child(3n + 1) { border-bottom: 3px solid var(--sun); }
+  .brands li:nth-child(3n + 2) { border-bottom: 3px solid var(--chilli); }
+  .brands li:nth-child(3n) { border-bottom: 3px solid var(--leaf-2); }
+
+  .campaigns { padding-bottom: 64px; }
+  .enq-wa { margin-top: 20px; }
+  :lang(kn) .hero h1 { font-size: clamp(2.1rem, 8vw, 3.9rem); line-height: 1.25; letter-spacing: 0; }
+  :lang(kn) .hl { white-space: normal; }
+  .posters { list-style: none; margin: 0; padding: 4px var(--gutter) 12px; display: grid; grid-auto-flow: column; grid-auto-columns: 68%; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; max-width: calc(var(--max) + var(--gutter) * 2); margin-inline: auto; }
+  @media (min-width: 640px) { .posters { grid-auto-columns: 40%; } }
+  @media (min-width: 1024px) { .posters { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; } }
+  .posters li { scroll-snap-align: start; border-radius: 16px; overflow: hidden; background: #000; aspect-ratio: 2 / 3; }
+  .posters :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+</style>

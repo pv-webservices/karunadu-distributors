@@ -1,0 +1,24 @@
+---
+import type { ResolvedImage } from "../lib/images";
+interface Props {
+  image: ResolvedImage;
+  alt: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+  largeWidth?: number;
+  smallWidth?: number;
+}
+const { image, alt, sizes = "(min-width: 900px) 50vw, 100vw", eager = false, class: className, largeWidth = 900, smallWidth = 480 } = Astro.props;
+const srcset = image.srcSm === image.src ? undefined : `${image.srcSm} ${smallWidth}w, ${image.src} ${largeWidth}w`;
+---
+<img
+  class={className}
+  src={image.src}
+  srcset={srcset}
+  sizes={srcset ? sizes : undefined}
+  alt={alt}
+  loading={eager ? "eager" : "lazy"}
+  decoding="async"
+  fetchpriority={eager ? "high" : undefined}
+/>

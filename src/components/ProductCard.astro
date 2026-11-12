@@ -1,0 +1,80 @@
+---
+import Icon from "./Icon.astro";
+import Img from "./Img.astro";
+import Tile from "./Tile.astro";
+import { getCategory, getSub, subName, productDesc, catName, type Product } from "../data/catalog";
+import { getLang } from "../i18n";
+import { t } from "../i18n/ui";
+import { resolveImage } from "../lib/images";
+
+interface Props { product: Product; eager?: boolean; }
+const { product, eager = false } = Astro.props;
+const lang = getLang(Astro.url);
+const s = t(lang);
+const variantLabel = (v: string) => s.variantLabels[v] ?? v;
+const cat = getCategory(product.category)!;
+const sub = getSub(product.sub)!;
+const image = resolveImage(product.image, sub.image);
+const hasOwnImage = Boolean(product.image && resolveImage(product.image));
+const imageAlt = !hasOwnImage
+  ? `${subName(sub, lang)} (${s.illustrative})`
+  : product.illustrative ? `${product.name} (${s.illustrative})` : product.name;
+// Search matches both languages so typing English on the Kannada page still works.
+const search = [product.name, product.brand, sub.name, sub.nameKn, cat.name, cat.nameKn, ...product.variants].join(" ").toLowerCase();
+const selectId = `v-${product.id}`;
+---
+<article class="pcard" data-product data-cat={product.category} data-cat-label={catName(cat, lang)} data-search={search}>
+  <div class="pcard__media">
+    {image ? (
+      <Img image={image} alt={imageAlt} sizes="(min-width: 1100px) 25vw, (min-width: 720px) 33vw, 50vw" eager={eager} />
+    ) : (
+      <Tile icon={sub.icon} tone={cat.tone} label={subName(sub, lang)} />
+    )}
+    <span class="pcard__brand">{product.brand}</span>
+  </div>
+  <div class="pcard__body">
+    <p class="pcard__sub">{subName(sub, lang)}</p>
+    <h3 class="pcard__name">{product.name}</h3>
+    <p class="pcard__desc">{productDesc(product, lang)}</p>
+    {product.variants.length > 1 ? (
+      <div class="pcard__variant">
+        <label class="visually-hidden" for={selectId}>{s.chooseVariant} {product.name}</label>
+        <select id={selectId} data-variant>
+          {product.variants.map((v) => <option value={v}>{variantLabel(v)}</option>)}
+        </select>
+      </div>
+    ) : (
+      <p class="pcard__single">{variantLabel(product.variants[0])}</p>
+    )}
+    <button type="button" class="pcard__add" data-add-order data-id={product.id} data-name={product.name}>
+      <Icon name="plus" size={18} class="i-plus" /><Icon name="check" size={18} class="i-check" />
+      <span>{s.addToOrder}</span>
+    </button>
+  </div>
+</article>
+
+<style>
+  .pcard { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; min-width: 0; }
+  .pcard:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .pcard[hidden] { display: none; }
+  .pcard__media { position: relative; aspect-ratio: 4 / 5; background: var(--paper-2); overflow: hidden; }
+  .pcard__media :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .pcard__brand { position: absolute; left: 8px; top: 8px; background: rgba(255, 255, 255, 0.94); color: var(--ink); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em; padding: 4px 8px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); max-width: calc(100% - 16px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pcard__body { display: flex; flex-direction: column; gap: 6px; padding: 12px; flex: 1; }
+  @media (min-width: 720px) { .pcard__body { padding: 16px; gap: 8px; } }
+  .pcard__sub { margin: 0; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--leaf-2); line-height: 1.3; }
+  :lang(kn) .pcard__sub { letter-spacing: 0; text-transform: none; font-size: 0.74rem; line-height: 1.45; }
+  .pcard__name { font-size: 1rem; margin: 0; line-height: 1.2; }
+  @media (min-width: 720px) { .pcard__name { font-size: 1.12rem; } }
+  .pcard__desc { display: none; margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.45; }
+  @media (min-width: 720px) { .pcard__desc { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
+  .pcard__variant { margin-top: auto; }
+  .pcard__variant select { width: 100%; min-height: 40px; padding: 6px 30px 6px 10px; border-radius: 10px; border: 1.5px solid var(--line); font-size: 0.88rem; font-weight: 600; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d1611' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") right 8px center/16px no-repeat; }
+  .pcard__single { margin: auto 0 0; font-size: 0.85rem; font-weight: 600; color: var(--ink-2); min-height: 40px; display: flex; align-items: center; }
+  .pcard__add { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; border-radius: 12px; border: 0; background: var(--ink); color: #fff; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background-color 0.15s; }
+  .pcard__add:hover { background: var(--leaf); }
+  .pcard__add :global(.i-check) { display: none; }
+  .pcard__add:global(.is-added) { background: var(--leaf-2); }
+  .pcard__add:global(.is-added) :global(.i-plus) { display: none; }
+  .pcard__add:global(.is-added) :global(.i-check) { display: block; }
+</style>

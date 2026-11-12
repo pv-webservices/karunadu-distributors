@@ -1,0 +1,122 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import EnquiryForm from "../components/EnquiryForm.astro";
+import { site, waLink, fullAddress } from "../data/site";
+import { getLang } from "../i18n";
+import { t } from "../i18n/ui";
+
+const lang = getLang(Astro.url);
+const s = t(lang);
+const copy = {
+  en: {
+    title: "Contact",
+    description: `Contact Karunadu Distributors in Varthur, Bengaluru. Call ${site.phones[0].display}, WhatsApp us, or email ${site.email} for retail orders and brand partnerships.`,
+    eyebrow: "Contact us",
+    h1: "Let's talk stock, brands and delivery",
+    lede: "Whether you run a shop or manufacture a product, the fastest way to reach us is WhatsApp. We reply during business hours, usually within a few hours.",
+    fastest: "Fastest response",
+    callUs: "Call us",
+    emailHint: "For catalogues & proposals",
+    visit: "Visit / hub",
+    enqEyebrow: "Send an enquiry",
+    enqTitle: "Tell us what you need",
+    enqLede: "Pick “I run a shop” for stock orders or “I'm a brand” for distribution partnerships. Your details open in WhatsApp — nothing is stored on this website.",
+    map: "Map",
+    waHi: "Hello Karunadu Distributors!",
+  },
+  kn: {
+    title: "ಸಂಪರ್ಕಿಸಿ",
+    description: `ವರ್ತೂರು, ಬೆಂಗಳೂರಿನ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಸಂಪರ್ಕಿಸಿ. ಅಂಗಡಿ ಆರ್ಡರ್ ಮತ್ತು ಬ್ರ್ಯಾಂಡ್ ಪಾಲುದಾರಿಕೆಗಾಗಿ ${site.phones[0].display} ಕರೆ ಮಾಡಿ, ವಾಟ್ಸಾಪ್ ಮಾಡಿ ಅಥವಾ ${site.email} ಇಮೇಲ್ ಮಾಡಿ.`,
+    eyebrow: "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
+    h1: "ಸ್ಟಾಕ್, ಬ್ರ್ಯಾಂಡ್ ಮತ್ತು ಡೆಲಿವರಿ ಬಗ್ಗೆ ಮಾತನಾಡೋಣ",
+    lede: "ನೀವು ಅಂಗಡಿ ನಡೆಸುತ್ತಿರಲಿ ಅಥವಾ ಉತ್ಪನ್ನ ತಯಾರಿಸುತ್ತಿರಲಿ — ನಮ್ಮನ್ನು ತಲುಪಲು ವಾಟ್ಸಾಪ್ ಅತಿ ವೇಗದ ದಾರಿ. ಕೆಲಸದ ಸಮಯದಲ್ಲಿ, ಸಾಮಾನ್ಯವಾಗಿ ಕೆಲವೇ ಗಂಟೆಗಳಲ್ಲಿ ಉತ್ತರಿಸುತ್ತೇವೆ.",
+    fastest: "ಅತಿ ವೇಗದ ಉತ್ತರ",
+    callUs: "ಕರೆ ಮಾಡಿ",
+    emailHint: "ಕ್ಯಾಟಲಾಗ್ & ಪ್ರಸ್ತಾವನೆಗಳಿಗೆ",
+    visit: "ಭೇಟಿ / ಕೇಂದ್ರ",
+    enqEyebrow: "ವಿಚಾರಣೆ ಕಳುಹಿಸಿ",
+    enqTitle: "ನಿಮಗೆ ಏನು ಬೇಕು ತಿಳಿಸಿ",
+    enqLede: "ಸ್ಟಾಕ್ ಆರ್ಡರ್‌ಗೆ “ನನ್ನ ಅಂಗಡಿ ಇದೆ”, ವಿತರಣಾ ಪಾಲುದಾರಿಕೆಗೆ “ನಾನು ಬ್ರ್ಯಾಂಡ್” ಆಯ್ಕೆ ಮಾಡಿ. ನಿಮ್ಮ ವಿವರಗಳು ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ತೆರೆಯುತ್ತವೆ — ಈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಯಾವುದೂ ಸಂಗ್ರಹವಾಗುವುದಿಲ್ಲ.",
+    map: "ನಕ್ಷೆ",
+    waHi: "ನಮಸ್ಕಾರ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್!",
+  },
+}[lang];
+
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(site.mapsQuery)}&hl=${lang}&output=embed`;
+const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.mapsQuery)}`;
+---
+<Base title={copy.title} description={copy.description}>
+  <PageHero eyebrow={copy.eyebrow} title={copy.h1} lede={copy.lede} crumbs={[{ href: "/contact/", label: copy.title }]} />
+
+  <section class="section contact">
+    <div class="wrap">
+      <div class="cards">
+        <a class="ccard ccard--wa" href={waLink(copy.waHi)} target="_blank" rel="noopener">
+          <span class="ccard__icon"><Icon name="whatsapp" size={28} /></span>
+          <span class="ccard__label">{s.whatsapp}</span>
+          <strong>{site.phones[0].display}</strong>
+          <span class="ccard__hint">{copy.fastest} <Icon name="arrow" size={16} /></span>
+        </a>
+        <div class="ccard">
+          <span class="ccard__icon"><Icon name="phone" size={26} /></span>
+          <span class="ccard__label">{copy.callUs}</span>
+          {site.phones.map((p) => <a href={`tel:${p.tel}`}><strong>{p.display}</strong></a>)}
+          <span class="ccard__hint">{site.hours[lang]}</span>
+        </div>
+        <a class="ccard" href={`mailto:${site.email}`}>
+          <span class="ccard__icon"><Icon name="mail" size={26} /></span>
+          <span class="ccard__label">{s.email}</span>
+          <strong class="ccard__email">{site.email}</strong>
+          <span class="ccard__hint">{copy.emailHint}</span>
+        </a>
+        <a class="ccard" href={mapLink} target="_blank" rel="noopener">
+          <span class="ccard__icon"><Icon name="pin" size={26} /></span>
+          <span class="ccard__label">{copy.visit}</span>
+          <strong>{site.address.line1[lang]}</strong>
+          <span class="ccard__hint">{site.address.city[lang]} – {site.address.pin} <Icon name="arrow" size={16} /></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="enquiry">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">{copy.enqEyebrow}</p>
+        <h2>{copy.enqTitle}</h2>
+        <p class="lede">{copy.enqLede}</p>
+        <div class="mapbox">
+          <iframe title={`${copy.map}: ${fullAddress(lang)}`} src={mapSrc} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="mapcap"><Icon name="pin" size={16} /> {fullAddress(lang)}</p>
+      </div>
+      <div class="reveal"><EnquiryForm /></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { padding-top: 8px; }
+  .cards { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cards { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+  .ccard { display: flex; flex-direction: column; gap: 4px; padding: 20px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; min-width: 0; }
+  a.ccard:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .ccard a { text-decoration: none; }
+  .ccard a:hover strong { text-decoration: underline; }
+  .ccard__icon { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--paper-2); color: var(--chilli); margin-bottom: 8px; }
+  .ccard__label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .ccard strong { font-family: var(--font-display); font-size: 1.2rem; }
+  .ccard__email { font-size: 1rem !important; overflow-wrap: anywhere; }
+  .ccard__hint { margin-top: auto; padding-top: 6px; font-size: 0.88rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+  :lang(kn) .ccard__label { letter-spacing: 0; text-transform: none; font-size: 0.85rem; }
+  .ccard--wa { background: var(--wa); color: #fff; border-color: var(--wa); }
+  .ccard--wa .ccard__icon { background: rgba(255, 255, 255, 0.2); color: #fff; }
+  .ccard--wa .ccard__label, .ccard--wa .ccard__hint { color: rgba(255, 255, 255, 0.85); }
+  .split { align-items: start; }
+  .mapbox { margin-top: 20px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4 / 3; background: var(--paper-2); }
+  .mapbox iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .mapcap { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.9rem; color: var(--muted); }
+</style>

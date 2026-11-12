@@ -1,0 +1,133 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import ProductCard from "../components/ProductCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { categories, subsOf, productsOf, productsInCategory, catName, catShort, catBlurb, subName, type Category } from "../data/catalog";
+import { waLink } from "../data/site";
+import { resolveImage } from "../lib/images";
+import { getLang, lp } from "../i18n";
+
+interface Props { category: Category; }
+const { category } = Astro.props;
+const lang = getLang(Astro.url);
+const name = catName(category, lang);
+const blurb = catBlurb(category, lang);
+const copy = {
+  en: {
+    eyebrow: category.priority ? "Top priority category" : "Product category",
+    description: `${name}: ${blurb} Distributed across Bengaluru by Karunadu Distributors.`,
+    products: "Products",
+    brands: "Brands:",
+    ask: "Ask for prices",
+    askMsg: `Hello Karunadu Distributors, please share prices for ${category.name}.`,
+    jumpAria: "Sub-categories",
+    lines: (n: number) => `${n} product line${n > 1 ? "s" : ""}`,
+    moreEyebrow: "More categories",
+    moreTitle: "Explore other ranges",
+  },
+  kn: {
+    eyebrow: category.priority ? "ಪ್ರಮುಖ ವಿಭಾಗ" : "ಉತ್ಪನ್ನ ವಿಭಾಗ",
+    description: `${name}: ${blurb} ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಮೂಲಕ ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ವಿತರಣೆ.`,
+    products: "ಉತ್ಪನ್ನಗಳು",
+    brands: "ಬ್ರ್ಯಾಂಡ್‌ಗಳು:",
+    ask: "ಬೆಲೆ ಕೇಳಿ",
+    askMsg: `ನಮಸ್ಕಾರ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್, ದಯವಿಟ್ಟು ${category.nameKn} ಬೆಲೆಗಳನ್ನು ಕಳುಹಿಸಿ.`,
+    jumpAria: "ಉಪ-ವಿಭಾಗಗಳು",
+    lines: (n: number) => `${n} ಉತ್ಪನ್ನ${n > 1 ? "ಗಳು" : ""}`,
+    moreEyebrow: "ಇತರ ವಿಭಾಗಗಳು",
+    moreTitle: "ಇತರ ಶ್ರೇಣಿಗಳನ್ನು ನೋಡಿ",
+  },
+}[lang];
+
+const subs = subsOf(category.slug).map((s) => ({ ...s, items: productsOf(s.slug) }));
+const all = productsInCategory(category.slug);
+const firstPhoto = all.find((p) => p.image)?.image;
+const hero = resolveImage(category.image, firstPhoto, subs[0]?.image);
+const others = categories.filter((c) => c.slug !== category.slug);
+const brandList = [...new Set(all.map((p) => p.brand))];
+---
+<Base title={name} description={copy.description}>
+  <PageHero
+    eyebrow={copy.eyebrow}
+    title={name}
+    lede={blurb}
+    image={hero}
+    imageAlt={name}
+    crumbs={[{ href: "/products/", label: copy.products }, { href: `/products/${category.slug}/`, label: catShort(category, lang) }]}
+  >
+    <p class="cat-brands"><strong>{copy.brands}</strong> <span lang="en">{brandList.join(" • ")}</span></p>
+    <div class="btn-row">
+      <a class="btn btn--wa" href={waLink(copy.askMsg)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {copy.ask}</a>
+    </div>
+  </PageHero>
+
+  <nav class="jump" aria-label={copy.jumpAria}>
+    <div class="wrap jump__inner">
+      {subs.map((s) => <a href={`#${s.slug}`}><Icon name={s.icon} size={18} /> {subName(s, lang)}</a>)}
+    </div>
+  </nav>
+
+  {subs.map((s, i) => (
+    <section class={`section sub ${i % 2 ? "section--tint" : ""}`} id={s.slug}>
+      <div class="wrap">
+        <div class="sub__head reveal">
+          <span class={`sub__icon sub__icon--${category.tone}`}><Icon name={s.icon} size={26} /></span>
+          <div>
+            <h2>{subName(s, lang)}</h2>
+            <p>{copy.lines(s.items.length)} • <span lang="en">{[...new Set(s.items.map((p) => p.brand))].join(", ")}</span></p>
+          </div>
+        </div>
+        <div class="products-grid">
+          {s.items.map((p) => <ProductCard product={p} />)}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">{copy.moreEyebrow}</p>
+        <h2>{copy.moreTitle}</h2>
+      </div>
+      <ul class="others">
+        {others.map((c) => (
+          <li><a href={lp(lang, `/products/${c.slug}/`)} class={`others__link others__link--${c.tone}`}>{catName(c, lang)}<Icon name="arrow" size={20} /></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .cat-brands { font-size: 0.95rem; color: var(--ink-2); margin-bottom: 18px; }
+  .jump { position: sticky; top: calc(var(--header-h) + 4px); z-index: 30; background: rgba(255, 250, 241, 0.96); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .jump__inner { display: flex; gap: 8px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; scrollbar-width: none; }
+  .jump__inner::-webkit-scrollbar { display: none; }
+  .jump a { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line); text-decoration: none; font-weight: 700; font-size: 0.88rem; white-space: nowrap; }
+  .jump a:hover { border-color: var(--ink); }
+  .sub { scroll-margin-top: calc(var(--header-h) + 64px); }
+  .sub__head { display: flex; gap: 14px; align-items: center; margin-bottom: 24px; }
+  .sub__head h2 { font-size: clamp(1.4rem, 4vw, 2rem); margin: 0 0 2px; }
+  .sub__head p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+  :lang(kn) .others__link { font-size: 1.02rem; }
+  .sub__icon { flex: none; width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; color: #fff; }
+  .sub__icon--red { background: var(--chilli); }
+  .sub__icon--yellow { background: var(--sun); color: var(--ink); }
+  .sub__icon--green { background: var(--leaf-2); }
+  .sub__icon--orange { background: var(--mango); }
+  .sub__icon--plum { background: var(--plum); }
+  .others { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  @media (min-width: 720px) { .others { grid-template-columns: repeat(2, 1fr); } }
+  .others__link { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-radius: var(--radius-sm); background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--accent); text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; transition: box-shadow 0.2s; }
+  .others__link:hover { box-shadow: var(--shadow); }
+  .others__link--red { --accent: var(--chilli); }
+  .others__link--yellow { --accent: var(--sun); }
+  .others__link--green { --accent: var(--leaf-2); }
+  .others__link--orange { --accent: var(--mango); }
+  .others__link--plum { --accent: var(--plum); }
+</style>

@@ -1,0 +1,190 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import ProductCard from "../components/ProductCard.astro";
+import CategoryCard from "../components/CategoryCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { categories, products, brands, productsInCategory, catShort } from "../data/catalog";
+import { waLink } from "../data/site";
+import { getLang } from "../i18n";
+
+const lang = getLang(Astro.url);
+const copy = {
+  en: {
+    title: "Products & Brands",
+    description: "Browse Karunadu Distributors' catalogue: beverages, kulki drinks, mineral water, goli soda, snacks, spices, pickles, dairy and bakery ingredients from trusted brands. Order on WhatsApp.",
+    h1: "Everything your counter needs, from one distributor",
+    lede: `${products.length} product lines from ${brands.length} brands across five categories. Add items to your order list and send it to us on WhatsApp — we'll confirm pricing and delivery.`,
+    priceList: "Get price list",
+    priceMsg: "Hello Karunadu Distributors, please share your latest product catalogue and price list.",
+    searchLabel: "Search products or brands",
+    searchPh: "Search products or brands…",
+    filterAria: "Filter by category",
+    all: "All",
+    countAll: `Showing all ${products.length} products`,
+    emptyTitle: "No matching products",
+    emptyText: "We add new brands regularly — ask us if you're looking for something specific.",
+    askWa: "Ask on WhatsApp",
+    askMsg: "Hello, I'm looking for a product that isn't on your website: ",
+    note: "We continuously add new products and brands to our distribution line-up. Images marked illustrative show the product type, not the exact pack.",
+    shopBy: "Shop by category",
+    explore: "Explore each range",
+    ctaTitle: "Are you a brand looking for distribution?",
+    ctaText: "We're always adding quality food, beverage and FMCG products to our Bengaluru network.",
+  },
+  kn: {
+    title: "ಉತ್ಪನ್ನಗಳು & ಬ್ರ್ಯಾಂಡ್‌ಗಳು",
+    description: "ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಕ್ಯಾಟಲಾಗ್: ಪಾನೀಯಗಳು, ಕುಲ್ಕಿ ಡ್ರಿಂಕ್ಸ್, ಮಿನರಲ್ ವಾಟರ್, ಗೋಲಿ ಸೋಡಾ, ಸ್ನ್ಯಾಕ್ಸ್, ಮಸಾಲೆ, ಉಪ್ಪಿನಕಾಯಿ, ಡೈರಿ ಮತ್ತು ಬೇಕರಿ ಸಾಮಗ್ರಿಗಳು. ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಆರ್ಡರ್ ಮಾಡಿ.",
+    h1: "ನಿಮ್ಮ ಕೌಂಟರ್‌ಗೆ ಬೇಕಾದ ಎಲ್ಲವೂ — ಒಬ್ಬರೇ ವಿತರಕರಿಂದ",
+    lede: `ಐದು ವಿಭಾಗಗಳಲ್ಲಿ ${brands.length} ಬ್ರ್ಯಾಂಡ್‌ಗಳ ${products.length} ಉತ್ಪನ್ನಗಳು. ಉತ್ಪನ್ನಗಳನ್ನು ಆರ್ಡರ್ ಪಟ್ಟಿಗೆ ಸೇರಿಸಿ ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಕಳುಹಿಸಿ — ಬೆಲೆ ಮತ್ತು ಡೆಲಿವರಿಯನ್ನು ನಾವು ಖಚಿತಪಡಿಸುತ್ತೇವೆ.`,
+    priceList: "ಬೆಲೆ ಪಟ್ಟಿ ಪಡೆಯಿರಿ",
+    priceMsg: "ನಮಸ್ಕಾರ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಕ್ಯಾಟಲಾಗ್ ಮತ್ತು ಬೆಲೆ ಪಟ್ಟಿ ಕಳುಹಿಸಿ.",
+    searchLabel: "ಉತ್ಪನ್ನ ಅಥವಾ ಬ್ರ್ಯಾಂಡ್ ಹುಡುಕಿ",
+    searchPh: "ಉತ್ಪನ್ನ / ಬ್ರ್ಯಾಂಡ್ ಹುಡುಕಿ…",
+    filterAria: "ವಿಭಾಗದ ಪ್ರಕಾರ ಆಯ್ಕೆ",
+    all: "ಎಲ್ಲವೂ",
+    countAll: `ಎಲ್ಲ ${products.length} ಉತ್ಪನ್ನಗಳು`,
+    emptyTitle: "ಹೊಂದುವ ಉತ್ಪನ್ನಗಳಿಲ್ಲ",
+    emptyText: "ನಾವು ನಿಯಮಿತವಾಗಿ ಹೊಸ ಬ್ರ್ಯಾಂಡ್‌ಗಳನ್ನು ಸೇರಿಸುತ್ತೇವೆ — ನಿರ್ದಿಷ್ಟ ಉತ್ಪನ್ನ ಬೇಕಿದ್ದರೆ ನಮ್ಮನ್ನು ಕೇಳಿ.",
+    askWa: "ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಕೇಳಿ",
+    askMsg: "ನಮಸ್ಕಾರ, ನಿಮ್ಮ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಇಲ್ಲದ ಒಂದು ಉತ್ಪನ್ನ ಬೇಕು: ",
+    note: "ನಮ್ಮ ವಿತರಣಾ ಪಟ್ಟಿಗೆ ಹೊಸ ಉತ್ಪನ್ನ ಮತ್ತು ಬ್ರ್ಯಾಂಡ್‌ಗಳನ್ನು ನಿರಂತರವಾಗಿ ಸೇರಿಸುತ್ತಿದ್ದೇವೆ. ‘ಉದಾಹರಣಾ ಚಿತ್ರ’ ಎಂದು ಗುರುತಿಸಿದ ಚಿತ್ರಗಳು ಉತ್ಪನ್ನದ ಪ್ರಕಾರವನ್ನು ತೋರಿಸುತ್ತವೆ, ನಿಖರ ಪ್ಯಾಕ್ ಅಲ್ಲ.",
+    shopBy: "ವಿಭಾಗವಾರು ನೋಡಿ",
+    explore: "ಪ್ರತಿ ಶ್ರೇಣಿಯನ್ನು ನೋಡಿ",
+    ctaTitle: "ವಿತರಣೆಗಾಗಿ ಹುಡುಕುತ್ತಿರುವ ಬ್ರ್ಯಾಂಡ್ ನೀವಾ?",
+    ctaText: "ನಮ್ಮ ಬೆಂಗಳೂರು ಜಾಲಕ್ಕೆ ಗುಣಮಟ್ಟದ ಆಹಾರ, ಪಾನೀಯ ಮತ್ತು FMCG ಉತ್ಪನ್ನಗಳನ್ನು ಸದಾ ಸೇರಿಸುತ್ತಿದ್ದೇವೆ.",
+  },
+}[lang];
+---
+<Base title={copy.title} description={copy.description}>
+  <PageHero eyebrow={copy.title} title={copy.h1} lede={copy.lede} crumbs={[{ href: "/products/", label: copy.title }]}>
+    <div class="btn-row">
+      <a class="btn btn--wa" href={waLink(copy.priceMsg)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {copy.priceList}</a>
+    </div>
+  </PageHero>
+
+  <div class="filters" data-filters>
+    <div class="wrap filters__inner">
+      <label class="search">
+        <Icon name="search" size={20} />
+        <span class="visually-hidden">{copy.searchLabel}</span>
+        <input type="search" placeholder={copy.searchPh} data-search-input autocomplete="off" />
+      </label>
+      <div class="chips" role="group" aria-label={copy.filterAria}>
+        <button type="button" class="fchip" aria-pressed="true" data-filter="all" data-label={copy.all}>{copy.all} <span>{products.length}</span></button>
+        {categories.map((c) => (
+          <button type="button" class="fchip" aria-pressed="false" data-filter={c.slug} data-label={catShort(c, lang)}>{catShort(c, lang)} <span>{productsInCategory(c.slug).length}</span></button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <section class="section catalog">
+    <div class="wrap">
+      <p class="catalog__count" data-count aria-live="polite">{copy.countAll}</p>
+      <div class="products-grid" data-grid>
+        {products.map((p, i) => <ProductCard product={p} eager={i < 2} />)}
+      </div>
+      <div class="catalog__empty" data-empty hidden>
+        <Icon name="search" size={34} />
+        <h3>{copy.emptyTitle}</h3>
+        <p>{copy.emptyText}</p>
+        <a class="btn btn--wa btn--sm" href={waLink(copy.askMsg)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {copy.askWa}</a>
+      </div>
+      <p class="catalog__note"><Icon name="star" size={18} /> {copy.note}</p>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">{copy.shopBy}</p>
+        <h2>{copy.explore}</h2>
+      </div>
+      <div class="grid grid-3">
+        {categories.map((c, i) => <CategoryCard category={c} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title={copy.ctaTitle} text={copy.ctaText} />
+</Base>
+
+<script>
+  import { strings, fmt } from "../scripts/shared";
+
+  const root = document.querySelector<HTMLElement>("[data-filters]");
+  const grid = document.querySelector<HTMLElement>("[data-grid]");
+  const input = document.querySelector<HTMLInputElement>("[data-search-input]");
+  const count = document.querySelector<HTMLElement>("[data-count]");
+  const empty = document.querySelector<HTMLElement>("[data-empty]");
+  if (root && grid && input && count && empty) {
+    const t = strings();
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-product]"));
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+    let active = "all";
+
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      const terms = q.split(/\s+/).filter(Boolean);
+      let shown = 0;
+      for (const card of cards) {
+        const inCat = active === "all" || card.dataset.cat === active;
+        const text = card.dataset.search ?? "";
+        const match = inCat && terms.every((term) => text.includes(term));
+        card.hidden = !match;
+        if (match) shown += 1;
+      }
+      const label = chips.find((c) => c.dataset.filter === active)?.dataset.label ?? "";
+      count.textContent = shown === cards.length
+        ? fmt(t.countAll, { n: shown })
+        : fmt(t.countSome, { shown, total: cards.length }) +
+          (active !== "all" ? fmt(t.inCat, { cat: label }) : "") +
+          (q ? fmt(t.forQ, { q: input.value.trim() }) : "");
+      empty.hidden = shown > 0;
+    };
+
+    const setActive = (key: string) => {
+      active = chips.some((c) => c.dataset.filter === key) ? key : "all";
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.filter === active)));
+      apply();
+    };
+
+    chips.forEach((chip) => chip.addEventListener("click", () => {
+      setActive(chip.dataset.filter ?? "all");
+      const url = new URL(window.location.href);
+      if (active === "all") url.searchParams.delete("c"); else url.searchParams.set("c", active);
+      history.replaceState(null, "", url);
+    }));
+    let timer = 0;
+    input.addEventListener("input", () => { window.clearTimeout(timer); timer = window.setTimeout(apply, 120); });
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("q")) input.value = params.get("q") ?? "";
+    setActive(params.get("c") ?? "all");
+  }
+</script>
+
+<style>
+  .filters { position: sticky; top: calc(var(--header-h) + 4px); z-index: 30; background: rgba(255, 250, 241, 0.96); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .filters__inner { display: grid; gap: 10px; padding-top: 12px; padding-bottom: 12px; }
+  @media (min-width: 900px) { .filters__inner { grid-template-columns: 320px 1fr; align-items: center; gap: 20px; } }
+  .search { display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 48px; border-radius: 999px; background: #fff; border: 1.5px solid rgba(29, 22, 17, 0.18); }
+  .search:focus-within { border-color: var(--leaf-2); box-shadow: 0 0 0 4px rgba(19, 138, 75, 0.15); }
+  .search input { border: 0; outline: none; flex: 1; min-width: 0; background: transparent; font-size: 1rem; height: 100%; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 calc(var(--gutter) * -1); padding: 2px var(--gutter); }
+  .chips::-webkit-scrollbar { display: none; }
+  @media (min-width: 900px) { .chips { flex-wrap: wrap; overflow: visible; margin: 0; padding: 0; } }
+  .fchip { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-weight: 700; font-size: 0.9rem; cursor: pointer; white-space: nowrap; }
+  .fchip span { font-size: 0.75rem; padding: 1px 7px; border-radius: 999px; background: var(--paper-2); }
+  .fchip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .fchip[aria-pressed="true"] span { background: var(--sun); color: var(--ink); }
+  .catalog { padding-top: 24px; }
+  .catalog__count { font-weight: 600; color: var(--muted); margin-bottom: 16px; }
+  .catalog__empty { text-align: center; display: grid; justify-items: center; gap: 4px; padding: 48px 16px; border: 2px dashed var(--line); border-radius: var(--radius); }
+  .catalog__empty[hidden] { display: none; }
+  .catalog__empty p { color: var(--muted); }
+  .catalog__note { display: flex; gap: 10px; align-items: flex-start; margin: 28px 0 0; padding: 14px 16px; border-radius: 14px; background: var(--paper-2); color: var(--ink-2); font-size: 0.92rem; }
+  .catalog__note :global(svg) { color: var(--sun-deep); flex: none; margin-top: 2px; }
+</style>

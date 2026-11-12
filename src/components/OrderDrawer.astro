@@ -1,0 +1,86 @@
+---
+import Icon from "./Icon.astro";
+import { getLang, lp } from "../i18n";
+import { t } from "../i18n/ui";
+const lang = getLang(Astro.url);
+const s = t(lang);
+---
+<dialog class="order" id="order-dialog" aria-labelledby="order-title">
+  <div class="order__panel">
+    <div class="order__head">
+      <div>
+        <p class="eyebrow">{s.orderEyebrow}</p>
+        <h2 id="order-title">{s.orderTitle}</h2>
+      </div>
+      <button type="button" class="order__close" data-close-order aria-label={s.orderClose}><Icon name="close" /></button>
+    </div>
+
+    <div class="order__body">
+      <div class="order__empty" data-order-empty>
+        <span class="order__empty-icon"><Icon name="list" size={30} /></span>
+        <p><strong>{s.orderEmptyTitle}</strong><br />{s.orderEmptyText}</p>
+        <a class="btn btn--sun btn--sm" href={lp(lang, "/products/")}>{s.browseProducts}</a>
+      </div>
+
+      <ul class="order__list" data-order-list></ul>
+
+      <form class="order__form" data-order-form novalidate hidden>
+        <p class="order__hint" set:html={s.orderHint} />
+        <div class="field">
+          <label for="o-shop">{s.shopName} *</label>
+          <input id="o-shop" name="shop" autocomplete="organization" required maxlength="80" placeholder={s.shopPh} />
+        </div>
+        <div class="field">
+          <label for="o-area">{s.areaLocality} *</label>
+          <input id="o-area" name="area" autocomplete="address-level2" required maxlength="80" placeholder={s.areaPh} />
+        </div>
+        <div class="field">
+          <label for="o-note">{s.noteOptional}</label>
+          <textarea id="o-note" name="note" rows="2" maxlength="300" placeholder={s.notePh}></textarea>
+        </div>
+        <button class="btn btn--wa btn--block" type="submit"><Icon name="whatsapp" /> {s.sendOrder}</button>
+        <button class="order__clear" type="button" data-clear-order><Icon name="trash" size={16} /> {s.clearList}</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" data-toast role="status" aria-live="polite"></div>
+
+<style>
+  .order { padding: 0; border: 0; max-width: none; max-height: none; width: 100%; height: 100%; margin: 0; background: transparent; }
+  .order::backdrop { background: rgba(29, 22, 17, 0.55); }
+  .order[open] { display: flex; justify-content: flex-end; align-items: flex-end; }
+  @media (min-width: 720px) { .order[open] { align-items: stretch; } }
+  .order__panel {
+    width: 100%; max-height: 92dvh; background: var(--paper); border-radius: 22px 22px 0 0;
+    display: flex; flex-direction: column; animation: up 0.22s var(--ease); box-shadow: var(--shadow-lg);
+  }
+  @media (min-width: 720px) { .order__panel { width: 440px; max-height: none; height: 100%; border-radius: 0; animation-name: left; } }
+  @keyframes up { from { transform: translateY(30px); opacity: 0; } }
+  @keyframes left { from { transform: translateX(30px); opacity: 0; } }
+  .order__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 20px 20px 12px; border-bottom: 1px solid var(--line); }
+  .order__head h2 { font-size: 1.6rem; margin: 0; }
+  .order__head .eyebrow { margin-bottom: 4px; }
+  .order__close { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); display: grid; place-items: center; cursor: pointer; flex: none; }
+  .order__body { overflow-y: auto; padding: 16px 20px calc(24px + env(safe-area-inset-bottom)); display: grid; gap: 16px; align-content: start; }
+  .order__empty { text-align: center; padding: 28px 8px; display: grid; justify-items: center; gap: 6px; }
+  .order__empty[hidden] { display: none; }
+  .order__empty-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--paper-2); display: grid; place-items: center; color: var(--chilli); }
+  .order__empty p { color: var(--ink-2); }
+  .order__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .order__list:empty { display: none; }
+  .order__hint { font-size: 0.88rem; color: var(--muted); margin: 0; }
+  .order__form { display: grid; gap: 12px; }
+  .order__form[hidden] { display: none; }
+  .order__clear { background: none; border: 0; color: var(--muted); font-weight: 600; display: inline-flex; gap: 6px; align-items: center; justify-content: center; cursor: pointer; padding: 8px; }
+  .order__clear:hover { color: var(--chilli); }
+
+  .order :global(.oitem) { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+  .order :global(.oitem__name) { font-weight: 700; line-height: 1.25; }
+  .order :global(.oitem__variant) { font-size: 0.85rem; color: var(--muted); }
+  .order :global(.oitem__qty) { display: inline-flex; align-items: center; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .order :global(.oitem__qty button) { width: 36px; height: 36px; border: 0; background: var(--paper-2); cursor: pointer; display: grid; place-items: center; font-weight: 800; font-size: 1.1rem; }
+  .order :global(.oitem__qty output) { min-width: 38px; text-align: center; font-weight: 800; }
+  .order :global(.oitem__remove) { grid-column: 1 / -1; justify-self: start; background: none; border: 0; padding: 0; color: var(--chilli); font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+</style>

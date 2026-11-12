@@ -1,0 +1,174 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import Img from "../components/Img.astro";
+import EnquiryForm from "../components/EnquiryForm.astro";
+import { site, waLink } from "../data/site";
+import { categories, catName } from "../data/catalog";
+import { resolveImage } from "../lib/images";
+import { getLang } from "../i18n";
+
+const lang = getLang(Astro.url);
+const catList = categories.map((c) => catName(c, lang)).join(", ");
+const copy = {
+  en: {
+    title: "For Manufacturers",
+    description: "Grow your food, beverage or FMCG brand in Bengaluru and Karnataka. Karunadu Distributors offers a ready retail network, reliable delivery and brand visibility.",
+    eyebrow: "For brands & manufacturers",
+    h1: "Put your brand on every shelf in Bengaluru",
+    lede: "We help emerging and established manufacturers scale their market footprint across supermarkets, kirana stores and wholesale channels — through active distribution, timely delivery and dedicated support.",
+    heroAlt: "Brand products ready for distribution",
+    partner: "Become a partner",
+    talk: "Talk to us",
+    offersEyebrow: "What you get",
+    offersTitle: "More than a delivery partner",
+    offersLede: "We actively sell your product into the market, keep it in stock, and make sure retailers and shoppers notice it.",
+    offers: [["Ready retail network", "Immediate access to 500+ active outlets — supermarkets, kirana stores, bakeries and wholesalers."], ["Reliable last-mile delivery", "Own vans on daily beat routes with 24–48 hour replenishment, so your product stays on the shelf."], ["Brand visibility", "Vehicle branding across Bengaluru, shelf placement and push for your schemes and launches."], ["Market feedback", "On-ground insight into what's selling, where, and what retailers are asking for."], ["Active sales team", "Field team that introduces new products to retailers rather than waiting for orders."], ["Hassle-free onboarding", "Clear commercial terms and a single point of contact for your brand."]],
+    vanAlt: "Karunadu Distributors branded delivery van",
+    visEyebrow: "Brand visibility",
+    visTitle: "Your brand, moving through the city every day",
+    visLede: "Our bright yellow-and-red vans run daily routes through Bengaluru's busiest retail streets. Partner brands can feature on vehicle branding, in-store displays and our WhatsApp retailer broadcasts.",
+    visTicks: [["Vehicle branding", "High-frequency exposure on daily delivery routes."], ["Scheme push", "Cashback, festive and launch offers communicated to retailers."], ["Shelf placement", "Help securing visible positions in partner stores."]],
+    procEyebrow: "Partnership process",
+    procTitle: "From first call to first shelf",
+    process: [["Share your products", "Send us your range, pack sizes, pricing and FSSAI / compliance details."], ["Fit assessment", "We review demand, margins and the right outlets and areas for your brand."], ["Agree terms", "Simple distribution terms, launch plan and initial stock quantities."], ["Launch & grow", "Stock moves to shelves; we report sell-through and scale to more outlets."]],
+    faqEyebrow: "Questions",
+    faqTitle: "Manufacturer FAQs",
+    faqs: [
+      ["What kind of brands do you work with?", `Food, beverage and FMCG manufacturers — from emerging regional brands to established names. Our current focus areas are ${catList}.`],
+      ["Which territory will you cover?", "Our core is Bengaluru (Urban & Rural) from our Varthur hub, with a growing statewide Karnataka network. We'll recommend the right starting territory for your product."],
+      ["Do you help with new product launches?", "Yes. We can plan a focused launch across selected outlets, push introductory schemes, and share early feedback from retailers."],
+      ["Can you put our brand on your delivery vans?", "Van branding is one of our visibility options for partner brands. Ask us about current availability and terms."],
+    ],
+    chat: "Chat with our team",
+    chatMsg: "Hello Karunadu Distributors, I represent a brand and would like to discuss distribution.",
+  },
+  kn: {
+    title: "ತಯಾರಕರಿಗೆ",
+    description: "ನಿಮ್ಮ ಆಹಾರ, ಪಾನೀಯ ಅಥವಾ FMCG ಬ್ರ್ಯಾಂಡ್ ಅನ್ನು ಬೆಂಗಳೂರು ಮತ್ತು ಕರ್ನಾಟಕದಲ್ಲಿ ಬೆಳೆಸಿ. ಸಿದ್ಧ ಅಂಗಡಿ ಜಾಲ, ನಂಬಿಕೆಯ ಡೆಲಿವರಿ ಮತ್ತು ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರ.",
+    eyebrow: "ಬ್ರ್ಯಾಂಡ್ & ತಯಾರಕರಿಗೆ",
+    h1: "ಬೆಂಗಳೂರಿನ ಪ್ರತಿ ಶೆಲ್ಫ್‌ನಲ್ಲೂ ನಿಮ್ಮ ಬ್ರ್ಯಾಂಡ್",
+    lede: "ಸಕ್ರಿಯ ವಿತರಣೆ, ಸಮಯಕ್ಕೆ ಸರಿಯಾದ ಡೆಲಿವರಿ ಮತ್ತು ಮೀಸಲು ಬೆಂಬಲದ ಮೂಲಕ ಹೊಸ ಮತ್ತು ಸ್ಥಾಪಿತ ತಯಾರಕರು ಸೂಪರ್‌ಮಾರ್ಕೆಟ್, ಕಿರಾಣಿ ಅಂಗಡಿ ಮತ್ತು ಸಗಟು ಮಾರುಕಟ್ಟೆಗಳಲ್ಲಿ ತಮ್ಮ ವ್ಯಾಪ್ತಿ ವಿಸ್ತರಿಸಲು ನೆರವಾಗುತ್ತೇವೆ.",
+    heroAlt: "ವಿತರಣೆಗೆ ಸಿದ್ಧವಾಗಿರುವ ಬ್ರ್ಯಾಂಡ್ ಉತ್ಪನ್ನಗಳು",
+    partner: "ಪಾಲುದಾರರಾಗಿ",
+    talk: "ನಮ್ಮೊಂದಿಗೆ ಮಾತನಾಡಿ",
+    offersEyebrow: "ನಿಮಗೆ ಸಿಗುವುದು",
+    offersTitle: "ಕೇವಲ ಡೆಲಿವರಿ ಪಾಲುದಾರರಲ್ಲ",
+    offersLede: "ನಿಮ್ಮ ಉತ್ಪನ್ನವನ್ನು ಮಾರುಕಟ್ಟೆಗೆ ಸಕ್ರಿಯವಾಗಿ ಮಾರುತ್ತೇವೆ, ಸ್ಟಾಕ್ ಕಾಪಾಡುತ್ತೇವೆ, ಅಂಗಡಿಗಳು ಮತ್ತು ಗ್ರಾಹಕರು ಅದನ್ನು ಗಮನಿಸುವಂತೆ ಮಾಡುತ್ತೇವೆ.",
+    offers: [["ಸಿದ್ಧ ಅಂಗಡಿ ಜಾಲ", "ಸೂಪರ್‌ಮಾರ್ಕೆಟ್, ಕಿರಾಣಿ, ಬೇಕರಿ ಮತ್ತು ಸಗಟು ವ್ಯಾಪಾರಿಗಳು ಸೇರಿ 500+ ಸಕ್ರಿಯ ಅಂಗಡಿಗಳಿಗೆ ತಕ್ಷಣ ಪ್ರವೇಶ."], ["ನಂಬಿಕೆಯ ಕೊನೆಯ ಹಂತದ ಡೆಲಿವರಿ", "ಸ್ವಂತ ವ್ಯಾನ್‌ಗಳ ದೈನಂದಿನ ಮಾರ್ಗಗಳು ಮತ್ತು 24–48 ಗಂಟೆಗಳ ಮರುಪೂರೈಕೆ — ನಿಮ್ಮ ಉತ್ಪನ್ನ ಶೆಲ್ಫ್‌ನಲ್ಲೇ ಇರುತ್ತದೆ."], ["ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರ", "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ವಾಹನ ಬ್ರ್ಯಾಂಡಿಂಗ್, ಶೆಲ್ಫ್ ಸ್ಥಾನ ಮತ್ತು ನಿಮ್ಮ ಯೋಜನೆ-ಬಿಡುಗಡೆಗಳ ಪ್ರಚಾರ."], ["ಮಾರುಕಟ್ಟೆ ಪ್ರತಿಕ್ರಿಯೆ", "ಯಾವುದು ಎಲ್ಲಿ ಮಾರಾಟವಾಗುತ್ತಿದೆ, ಅಂಗಡಿಗಳು ಏನು ಕೇಳುತ್ತಿವೆ ಎಂಬ ನೆಲಮಟ್ಟದ ಮಾಹಿತಿ."], ["ಸಕ್ರಿಯ ಮಾರಾಟ ತಂಡ", "ಆರ್ಡರ್‌ಗಾಗಿ ಕಾಯದೆ, ಹೊಸ ಉತ್ಪನ್ನಗಳನ್ನು ಅಂಗಡಿಗಳಿಗೆ ಪರಿಚಯಿಸುವ ಫೀಲ್ಡ್ ತಂಡ."], ["ಸುಲಭ ಸೇರ್ಪಡೆ", "ಸ್ಪಷ್ಟ ವ್ಯಾಪಾರ ಷರತ್ತುಗಳು ಮತ್ತು ನಿಮ್ಮ ಬ್ರ್ಯಾಂಡ್‌ಗೆ ಒಬ್ಬರೇ ಸಂಪರ್ಕ ವ್ಯಕ್ತಿ."]],
+    vanAlt: "ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಬ್ರ್ಯಾಂಡೆಡ್ ಡೆಲಿವರಿ ವ್ಯಾನ್",
+    visEyebrow: "ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರ",
+    visTitle: "ಪ್ರತಿದಿನ ನಗರದಾದ್ಯಂತ ಸಂಚರಿಸುವ ನಿಮ್ಮ ಬ್ರ್ಯಾಂಡ್",
+    visLede: "ನಮ್ಮ ಹಳದಿ-ಕೆಂಪು ವ್ಯಾನ್‌ಗಳು ಪ್ರತಿದಿನ ಬೆಂಗಳೂರಿನ ಜನನಿಬಿಡ ವ್ಯಾಪಾರ ರಸ್ತೆಗಳಲ್ಲಿ ಸಂಚರಿಸುತ್ತವೆ. ಪಾಲುದಾರ ಬ್ರ್ಯಾಂಡ್‌ಗಳು ವಾಹನ ಬ್ರ್ಯಾಂಡಿಂಗ್, ಅಂಗಡಿಯೊಳಗಿನ ಡಿಸ್‌ಪ್ಲೇ ಮತ್ತು ನಮ್ಮ ವಾಟ್ಸಾಪ್ ಅಂಗಡಿ ಪ್ರಸಾರಗಳಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳಬಹುದು.",
+    visTicks: [["ವಾಹನ ಬ್ರ್ಯಾಂಡಿಂಗ್", "ದೈನಂದಿನ ಡೆಲಿವರಿ ಮಾರ್ಗಗಳಲ್ಲಿ ಪದೇ ಪದೇ ಕಾಣಿಸಿಕೊಳ್ಳುವಿಕೆ."], ["ಯೋಜನೆ ಪ್ರಚಾರ", "ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್, ಹಬ್ಬ ಮತ್ತು ಬಿಡುಗಡೆ ಆಫರ್‌ಗಳನ್ನು ಅಂಗಡಿಗಳಿಗೆ ತಿಳಿಸುತ್ತೇವೆ."], ["ಶೆಲ್ಫ್ ಸ್ಥಾನ", "ಪಾಲುದಾರ ಅಂಗಡಿಗಳಲ್ಲಿ ಎದ್ದು ಕಾಣುವ ಸ್ಥಾನ ಪಡೆಯಲು ನೆರವು."]],
+    procEyebrow: "ಪಾಲುದಾರಿಕೆ ಪ್ರಕ್ರಿಯೆ",
+    procTitle: "ಮೊದಲ ಕರೆಯಿಂದ ಮೊದಲ ಶೆಲ್ಫ್‌ವರೆಗೆ",
+    process: [["ಉತ್ಪನ್ನ ಮಾಹಿತಿ ಹಂಚಿಕೊಳ್ಳಿ", "ನಿಮ್ಮ ಉತ್ಪನ್ನ ಶ್ರೇಣಿ, ಪ್ಯಾಕ್ ಗಾತ್ರ, ಬೆಲೆ ಮತ್ತು FSSAI / ಅನುಸರಣೆ ವಿವರಗಳನ್ನು ಕಳುಹಿಸಿ."], ["ಹೊಂದಾಣಿಕೆ ಪರಿಶೀಲನೆ", "ಬೇಡಿಕೆ, ಲಾಭಾಂಶ ಮತ್ತು ನಿಮ್ಮ ಬ್ರ್ಯಾಂಡ್‌ಗೆ ಸೂಕ್ತ ಅಂಗಡಿಗಳು-ಪ್ರದೇಶಗಳನ್ನು ಪರಿಶೀಲಿಸುತ್ತೇವೆ."], ["ಷರತ್ತುಗಳ ಒಪ್ಪಂದ", "ಸರಳ ವಿತರಣಾ ಷರತ್ತುಗಳು, ಬಿಡುಗಡೆ ಯೋಜನೆ ಮತ್ತು ಆರಂಭಿಕ ಸ್ಟಾಕ್ ಪ್ರಮಾಣ."], ["ಬಿಡುಗಡೆ & ಬೆಳವಣಿಗೆ", "ಸ್ಟಾಕ್ ಶೆಲ್ಫ್‌ಗಳಿಗೆ ತಲುಪುತ್ತದೆ; ಮಾರಾಟದ ವರದಿ ನೀಡಿ ಹೆಚ್ಚಿನ ಅಂಗಡಿಗಳಿಗೆ ವಿಸ್ತರಿಸುತ್ತೇವೆ."]],
+    faqEyebrow: "ಪ್ರಶ್ನೆಗಳು",
+    faqTitle: "ತಯಾರಕರ ಸಾಮಾನ್ಯ ಪ್ರಶ್ನೆಗಳು",
+    faqs: [
+      ["ನೀವು ಯಾವ ರೀತಿಯ ಬ್ರ್ಯಾಂಡ್‌ಗಳೊಂದಿಗೆ ಕೆಲಸ ಮಾಡುತ್ತೀರಿ?", `ಆಹಾರ, ಪಾನೀಯ ಮತ್ತು FMCG ತಯಾರಕರು — ಹೊಸ ಪ್ರಾದೇಶಿಕ ಬ್ರ್ಯಾಂಡ್‌ಗಳಿಂದ ಸ್ಥಾಪಿತ ಹೆಸರುಗಳವರೆಗೆ. ನಮ್ಮ ಈಗಿನ ಮುಖ್ಯ ವಿಭಾಗಗಳು: ${catList}.`],
+      ["ಯಾವ ಪ್ರದೇಶವನ್ನು ನೀವು ಒಳಗೊಳ್ಳುತ್ತೀರಿ?", "ವರ್ತೂರು ಕೇಂದ್ರದಿಂದ ಬೆಂಗಳೂರು (ನಗರ & ಗ್ರಾಮಾಂತರ) ನಮ್ಮ ಮುಖ್ಯ ಪ್ರದೇಶ; ಕರ್ನಾಟಕದಾದ್ಯಂತ ಜಾಲ ಬೆಳೆಯುತ್ತಿದೆ. ನಿಮ್ಮ ಉತ್ಪನ್ನಕ್ಕೆ ಸೂಕ್ತ ಆರಂಭಿಕ ಪ್ರದೇಶವನ್ನು ಸೂಚಿಸುತ್ತೇವೆ."],
+      ["ಹೊಸ ಉತ್ಪನ್ನ ಬಿಡುಗಡೆಗೆ ನೆರವಾಗುತ್ತೀರಾ?", "ಹೌದು. ಆಯ್ದ ಅಂಗಡಿಗಳಲ್ಲಿ ಕೇಂದ್ರೀಕೃತ ಬಿಡುಗಡೆ ಯೋಜಿಸಿ, ಪರಿಚಯ ಆಫರ್‌ಗಳನ್ನು ಪ್ರಚಾರ ಮಾಡಿ, ಅಂಗಡಿಗಳ ಆರಂಭಿಕ ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು ಹಂಚಿಕೊಳ್ಳುತ್ತೇವೆ."],
+      ["ನಿಮ್ಮ ಡೆಲಿವರಿ ವ್ಯಾನ್‌ಗಳ ಮೇಲೆ ನಮ್ಮ ಬ್ರ್ಯಾಂಡ್ ಹಾಕಬಹುದೇ?", "ಪಾಲುದಾರ ಬ್ರ್ಯಾಂಡ್‌ಗಳಿಗೆ ವ್ಯಾನ್ ಬ್ರ್ಯಾಂಡಿಂಗ್ ನಮ್ಮ ಪ್ರಚಾರ ಆಯ್ಕೆಗಳಲ್ಲಿ ಒಂದು. ಈಗಿನ ಲಭ್ಯತೆ ಮತ್ತು ಷರತ್ತುಗಳ ಬಗ್ಗೆ ನಮ್ಮನ್ನು ಕೇಳಿ."],
+    ],
+    chat: "ನಮ್ಮ ತಂಡದೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
+    chatMsg: "ನಮಸ್ಕಾರ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್, ನಾನು ಒಂದು ಬ್ರ್ಯಾಂಡ್ ಪ್ರತಿನಿಧಿಸುತ್ತೇನೆ — ವಿತರಣೆ ಬಗ್ಗೆ ಮಾತನಾಡಬೇಕು.",
+  },
+}[lang];
+
+const hero = resolveImage("manufacturer-partnership", "beekay-range");
+const van = resolveImage("delivery-van");
+const offerIcons = ["store", "truck", "megaphone", "chart", "users", "handshake"];
+---
+<Base title={copy.title} description={copy.description}>
+  <PageHero eyebrow={copy.eyebrow} title={copy.h1} lede={copy.lede} image={hero} imageAlt={copy.heroAlt} crumbs={[{ href: "/manufacturers/", label: copy.title }]}>
+    <div class="btn-row">
+      <a class="btn btn--leaf" href="#brand-form"><Icon name="handshake" /> {copy.partner}</a>
+      <a class="btn btn--ghost" href={`tel:${site.phones[0].tel}`}><Icon name="phone" /> {copy.talk}</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">{copy.offersEyebrow}</p>
+        <h2>{copy.offersTitle}</h2>
+        <p class="lede">{copy.offersLede}</p>
+      </div>
+      <div class="grid grid-3">
+        {copy.offers.map(([title, text], i) => (
+          <article class="offer reveal">
+            <span class="offer__num">{String(i + 1).padStart(2, "0")}</span>
+            <span class="offer__icon"><Icon name={offerIcons[i]} size={26} /></span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {van && (
+    <section class="section section--ink">
+      <div class="wrap split">
+        <div class="media-frame visibility__img reveal">
+          <Img image={van} alt={copy.vanAlt} sizes="(min-width: 900px) 50vw, 100vw" largeWidth={1280} smallWidth={720} />
+        </div>
+        <div class="reveal">
+          <p class="eyebrow">{copy.visEyebrow}</p>
+          <h2>{copy.visTitle}</h2>
+          <p class="lede">{copy.visLede}</p>
+          <ul class="ticks ticks--light">
+            {copy.visTicks.map(([a, b]) => <li><span><strong>{a}</strong>{b}</span></li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="head head--center reveal">
+        <p class="eyebrow">{copy.procEyebrow}</p>
+        <h2>{copy.procTitle}</h2>
+      </div>
+      <ol class="steps reveal">
+        {copy.process.map(([title, text]) => <li><h3>{title}</h3><p>{text}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">{copy.faqEyebrow}</p>
+        <h2>{copy.faqTitle}</h2>
+        <div class="faq">
+          {copy.faqs.map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
+        </div>
+        <a class="btn btn--wa chat-btn" href={waLink(copy.chatMsg)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {copy.chat}</a>
+      </div>
+      <div id="brand-form" class="reveal form-anchor">
+        <EnquiryForm mode="manufacturer" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .offer { position: relative; padding: 24px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); overflow: hidden; }
+  .offer__num { position: absolute; right: 16px; top: 10px; font-family: var(--font-display); font-weight: 800; font-size: 2.6rem; color: var(--paper-2); line-height: 1; }
+  .offer__icon { position: relative; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--leaf); color: #fff; margin-bottom: 14px; }
+  .offer h3 { position: relative; margin-bottom: 6px; }
+  .offer p { position: relative; margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .visibility__img { aspect-ratio: 1280 / 736; border: 4px solid var(--sun); }
+  .ticks--light li::before { background-color: var(--sun); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d1611' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E"); }
+  .ticks--light span { color: rgba(255, 255, 255, 0.8); }
+  .ticks--light strong { color: #fff; }
+  .chat-btn { margin-top: 20px; }
+  .form-anchor { scroll-margin-top: calc(var(--header-h) + 16px); }
+  .split { align-items: start; }
+  .section--ink .split { align-items: center; }
+</style>
