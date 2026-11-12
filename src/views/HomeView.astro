@@ -319,14 +319,14 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
   .hero__card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--sun); display: grid; place-items: center; flex: none; }
   .hero__card-icon :global(svg) { width: 20px; height: 20px; }
   .hero__card strong { display: block; font-family: var(--font-display); font-size: 0.92rem; line-height: 1.2; }
-  .hero__card span { display: block; font-size: 0.76rem; line-height: 1.3; color: var(--muted); }
+  .hero__card div > span { display: block; font-size: 0.76rem; line-height: 1.3; color: var(--muted); }
   /* Desktop: floats off the photo's corner, mostly outside the image. */
   @media (min-width: 900px) {
     .hero__card { position: absolute; left: -28px; bottom: -28px; margin: 0; gap: 12px; padding: 12px 18px 12px 12px; border-radius: 16px; max-width: 380px; }
     .hero__card-icon { width: 46px; height: 46px; border-radius: 12px; }
     .hero__card-icon :global(svg) { width: 26px; height: 26px; }
     .hero__card strong { font-size: 1.05rem; }
-    .hero__card span { font-size: 0.85rem; }
+    .hero__card div > span { font-size: 0.85rem; }
   }
 
   .stats { background: var(--leaf); color: #fff; }
