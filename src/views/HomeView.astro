@@ -6,7 +6,7 @@ import CategoryCard from "../components/CategoryCard.astro";
 import ProductCard from "../components/ProductCard.astro";
 import VanBanner from "../components/VanBanner.astro";
 import EnquiryForm from "../components/EnquiryForm.astro";
-import { site, waLink } from "../data/site";
+import { site, waLink, mapEmbedUrl, fullAddress } from "../data/site";
 import { categories, products, brands } from "../data/catalog";
 import { resolveImage } from "../lib/images";
 import { getLang, lp } from "../i18n";
@@ -15,15 +15,14 @@ const lang = getLang(Astro.url);
 const copy = {
   en: {
     title: "Home",
-    pill: "Bengaluru & all Karnataka",
+    pill: "Bengaluru first",
     h1: ["Connecting brands to ", "every store", ""],
     lede: "Bengaluru's trusted distribution partner for <strong>food, beverage and FMCG brands</strong> — bridging national and regional manufacturers with local retail shelves through reliable, on-time delivery.",
     ctaShop: "I run a retail shop",
     ctaBrand: "I'm a brand / manufacturer",
-    altLine: { lang: "kn", text: `${site.nameKn} — ಪ್ರತಿ ಅಂಗಡಿಗೆ ಬ್ರ್ಯಾಂಡ್‌ಗಳನ್ನು ತಲುಪಿಸುತ್ತೇವೆ` },
     heroAlt: "Karunadu Distributors delivery vehicle loaded with beverage and FMCG stock",
-    cardTitle: "Express delivery",
-    cardText: "24–48 hr replenishment across Bengaluru",
+    cardTitle: "Flexible delivery",
+    cardText: "Local logistics across Bengaluru",
     statsAria: "Key numbers",
     audEyebrow: "Who we work with",
     audTitle: "One bridge, two kinds of partners",
@@ -37,11 +36,11 @@ const copy = {
     brand: {
       title: "For brands & manufacturers",
       text: "Emerging and established food, beverage and FMCG producers looking to scale in Karnataka.",
-      ticks: [["Ready retail network", "500+ active outlets, from neighbourhood kiranas to supermarkets."], ["Brand visibility", "Branded vans and in-store push for your campaigns."], ["Hassle-free onboarding", "Simple terms and a dedicated point of contact."]],
+      ticks: [["Ready retail network", "A growing network of outlets, from neighbourhood kiranas to supermarkets."], ["Brand visibility", "Branded vans and in-store push for your campaigns."], ["Hassle-free onboarding", "Simple terms and a dedicated point of contact."]],
       btn: "Partner with us",
     },
     catEyebrow: "What we distribute",
-    catTitle: "Five categories, 18 product lines",
+    catTitle: "Multi-category distribution",
     catLede: "From cooler-shelf beverages to bakery ingredients — one distributor for everything your counter needs.",
     catAll: "See the full catalogue",
     catAllCount: `${products.length} products from ${brands.length} brands`,
@@ -51,7 +50,7 @@ const copy = {
     allProducts: "All products",
     stepsEyebrow: "Simple ordering",
     stepsTitle: "From WhatsApp to your shelf",
-    steps: [["Pick your products", "Browse the catalogue or ask us for the latest price list."], ["Send on WhatsApp", "Share your order list with shop name and area — that's it."], ["We confirm", "Our team confirms stock, pricing and a delivery slot."], ["Delivered in 24–48 hrs", "Our vans deliver to your doorstep across Bengaluru."]],
+    steps: [["Pick your products", "Browse the catalogue or ask us for the latest price list."], ["Send on WhatsApp", "Share your order list with shop name and area — that's it."], ["We confirm", "Our team confirms stock, pricing and a delivery slot."], ["Flexible delivery", "We deliver to your doorstep across Bengaluru at a slot that suits you."]],
     brandsEyebrow: "Brands we carry",
     brandsTitle: "Trusted names, steady demand",
     campEyebrow: "Brand campaigns",
@@ -66,19 +65,20 @@ const copy = {
     emailLabel: "Email",
     hoursLabel: "Hours",
     quickWa: "Quick WhatsApp chat",
+    mapTitle: "Find us on the map",
+    openMap: "Open in Google Maps",
     waHi: "Hello Karunadu Distributors!",
   },
   kn: {
     title: "ಮುಖಪುಟ",
-    pill: "ಬೆಂಗಳೂರು & ಸಂಪೂರ್ಣ ಕರ್ನಾಟಕ",
+    pill: "ಮೊದಲು ಬೆಂಗಳೂರು",
     h1: ["", "ಪ್ರತಿ ಅಂಗಡಿಗೂ", " ಬ್ರ್ಯಾಂಡ್‌ಗಳ ಸಂಪರ್ಕ"],
     lede: "<strong>ಆಹಾರ, ಪಾನೀಯ ಮತ್ತು FMCG ಬ್ರ್ಯಾಂಡ್‌ಗಳಿಗೆ</strong> ಬೆಂಗಳೂರಿನ ನಂಬಿಕೆಯ ವಿತರಣಾ ಪಾಲುದಾರರು — ರಾಷ್ಟ್ರೀಯ ಮತ್ತು ಪ್ರಾದೇಶಿಕ ತಯಾರಕರನ್ನು ಸ್ಥಳೀಯ ಅಂಗಡಿಗಳ ಶೆಲ್ಫ್‌ಗಳೊಂದಿಗೆ ಸಮಯಕ್ಕೆ ಸರಿಯಾದ ಡೆಲಿವರಿ ಮೂಲಕ ಜೋಡಿಸುತ್ತೇವೆ.",
     ctaShop: "ನನ್ನ ಅಂಗಡಿ ಇದೆ",
     ctaBrand: "ನಾನು ಬ್ರ್ಯಾಂಡ್ / ತಯಾರಕ",
-    altLine: { lang: "en", text: `${site.name} — Connecting brands to every store` },
     heroAlt: "ಪಾನೀಯ ಮತ್ತು FMCG ಸ್ಟಾಕ್ ತುಂಬಿದ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್ ಡೆಲಿವರಿ ವಾಹನ",
-    cardTitle: "ಎಕ್ಸ್‌ಪ್ರೆಸ್ ಡೆಲಿವರಿ",
-    cardText: "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ 24–48 ಗಂಟೆಗಳಲ್ಲಿ ಮರುಪೂರೈಕೆ",
+    cardTitle: "ಅನುಕೂಲಕರ ಡೆಲಿವರಿ",
+    cardText: "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ಸ್ಥಳೀಯ ಸಾಗಣೆ",
     statsAria: "ಮುಖ್ಯ ಅಂಕಿಅಂಶಗಳು",
     audEyebrow: "ನಾವು ಯಾರೊಂದಿಗೆ ಕೆಲಸ ಮಾಡುತ್ತೇವೆ",
     audTitle: "ಒಂದು ಸೇತುವೆ, ಎರಡು ಬಗೆಯ ಪಾಲುದಾರರು",
@@ -92,11 +92,11 @@ const copy = {
     brand: {
       title: "ಬ್ರ್ಯಾಂಡ್ & ತಯಾರಕರಿಗೆ",
       text: "ಕರ್ನಾಟಕದಲ್ಲಿ ಮಾರುಕಟ್ಟೆ ವಿಸ್ತರಿಸಲು ಬಯಸುವ ಹೊಸ ಮತ್ತು ಸ್ಥಾಪಿತ ಆಹಾರ, ಪಾನೀಯ ಹಾಗೂ FMCG ತಯಾರಕರು.",
-      ticks: [["ಸಿದ್ಧ ಅಂಗಡಿ ಜಾಲ", "ನೆರೆಹೊರೆಯ ಕಿರಾಣಿಯಿಂದ ಸೂಪರ್‌ಮಾರ್ಕೆಟ್‌ವರೆಗೆ 500+ ಸಕ್ರಿಯ ಅಂಗಡಿಗಳು."], ["ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರ", "ಬ್ರ್ಯಾಂಡೆಡ್ ವ್ಯಾನ್‌ಗಳು ಮತ್ತು ಅಂಗಡಿಗಳಲ್ಲಿ ನಿಮ್ಮ ಆಫರ್‌ಗಳ ಪ್ರಚಾರ."], ["ಸುಲಭ ಸೇರ್ಪಡೆ", "ಸರಳ ಷರತ್ತುಗಳು ಮತ್ತು ಒಬ್ಬ ಮೀಸಲು ಸಂಪರ್ಕ ವ್ಯಕ್ತಿ."]],
+      ticks: [["ಸಿದ್ಧ ಅಂಗಡಿ ಜಾಲ", "ನೆರೆಹೊರೆಯ ಕಿರಾಣಿಯಿಂದ ಸೂಪರ್‌ಮಾರ್ಕೆಟ್‌ವರೆಗೆ ಬೆಳೆಯುತ್ತಿರುವ ಅಂಗಡಿಗಳ ಜಾಲ."], ["ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರ", "ಬ್ರ್ಯಾಂಡೆಡ್ ವ್ಯಾನ್‌ಗಳು ಮತ್ತು ಅಂಗಡಿಗಳಲ್ಲಿ ನಿಮ್ಮ ಆಫರ್‌ಗಳ ಪ್ರಚಾರ."], ["ಸುಲಭ ಸೇರ್ಪಡೆ", "ಸರಳ ಷರತ್ತುಗಳು ಮತ್ತು ಒಬ್ಬ ಮೀಸಲು ಸಂಪರ್ಕ ವ್ಯಕ್ತಿ."]],
       btn: "ನಮ್ಮ ಪಾಲುದಾರರಾಗಿ",
     },
     catEyebrow: "ನಾವು ವಿತರಿಸುವುದು",
-    catTitle: "ಐದು ವಿಭಾಗಗಳು, 18 ಉತ್ಪನ್ನ ಶ್ರೇಣಿಗಳು",
+    catTitle: "ಬಹು-ವಿಭಾಗ ವಿತರಣೆ",
     catLede: "ಕೂಲರ್ ಪಾನೀಯಗಳಿಂದ ಬೇಕರಿ ಸಾಮಗ್ರಿಗಳವರೆಗೆ — ನಿಮ್ಮ ಕೌಂಟರ್‌ಗೆ ಬೇಕಾದ ಎಲ್ಲದಕ್ಕೂ ಒಬ್ಬರೇ ವಿತರಕರು.",
     catAll: "ಪೂರ್ಣ ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ",
     catAllCount: `${brands.length} ಬ್ರ್ಯಾಂಡ್‌ಗಳ ${products.length} ಉತ್ಪನ್ನಗಳು`,
@@ -106,7 +106,7 @@ const copy = {
     allProducts: "ಎಲ್ಲ ಉತ್ಪನ್ನಗಳು",
     stepsEyebrow: "ಸುಲಭ ಆರ್ಡರ್",
     stepsTitle: "ವಾಟ್ಸಾಪ್‌ನಿಂದ ನಿಮ್ಮ ಶೆಲ್ಫ್‌ಗೆ",
-    steps: [["ಉತ್ಪನ್ನ ಆಯ್ಕೆ ಮಾಡಿ", "ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ ಅಥವಾ ಇತ್ತೀಚಿನ ಬೆಲೆ ಪಟ್ಟಿ ಕೇಳಿ."], ["ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಕಳುಹಿಸಿ", "ಅಂಗಡಿ ಹೆಸರು ಮತ್ತು ಪ್ರದೇಶದೊಂದಿಗೆ ಆರ್ಡರ್ ಪಟ್ಟಿ ಕಳುಹಿಸಿ — ಅಷ್ಟೇ."], ["ನಾವು ಖಚಿತಪಡಿಸುತ್ತೇವೆ", "ಸ್ಟಾಕ್, ಬೆಲೆ ಮತ್ತು ಡೆಲಿವರಿ ಸಮಯವನ್ನು ನಮ್ಮ ತಂಡ ಖಚಿತಪಡಿಸುತ್ತದೆ."], ["24–48 ಗಂಟೆಗಳಲ್ಲಿ ಡೆಲಿವರಿ", "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ನಮ್ಮ ವ್ಯಾನ್‌ಗಳು ನಿಮ್ಮ ಅಂಗಡಿ ಬಾಗಿಲಿಗೆ ತಲುಪಿಸುತ್ತವೆ."]],
+    steps: [["ಉತ್ಪನ್ನ ಆಯ್ಕೆ ಮಾಡಿ", "ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ ಅಥವಾ ಇತ್ತೀಚಿನ ಬೆಲೆ ಪಟ್ಟಿ ಕೇಳಿ."], ["ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಕಳುಹಿಸಿ", "ಅಂಗಡಿ ಹೆಸರು ಮತ್ತು ಪ್ರದೇಶದೊಂದಿಗೆ ಆರ್ಡರ್ ಪಟ್ಟಿ ಕಳುಹಿಸಿ — ಅಷ್ಟೇ."], ["ನಾವು ಖಚಿತಪಡಿಸುತ್ತೇವೆ", "ಸ್ಟಾಕ್, ಬೆಲೆ ಮತ್ತು ಡೆಲಿವರಿ ಸಮಯವನ್ನು ನಮ್ಮ ತಂಡ ಖಚಿತಪಡಿಸುತ್ತದೆ."], ["ಅನುಕೂಲಕರ ಡೆಲಿವರಿ", "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ನಿಮಗೆ ಅನುಕೂಲವಾದ ಸಮಯಕ್ಕೆ ಅಂಗಡಿ ಬಾಗಿಲಿಗೆ ತಲುಪಿಸುತ್ತೇವೆ."]],
     brandsEyebrow: "ನಮ್ಮಲ್ಲಿರುವ ಬ್ರ್ಯಾಂಡ್‌ಗಳು",
     brandsTitle: "ನಂಬಿಕೆಯ ಹೆಸರುಗಳು, ನಿರಂತರ ಬೇಡಿಕೆ",
     campEyebrow: "ಬ್ರ್ಯಾಂಡ್ ಪ್ರಚಾರಗಳು",
@@ -121,6 +121,8 @@ const copy = {
     emailLabel: "ಇಮೇಲ್",
     hoursLabel: "ಸಮಯ",
     quickWa: "ತಕ್ಷಣ ವಾಟ್ಸಾಪ್ ಚಾಟ್",
+    mapTitle: "ನಕ್ಷೆಯಲ್ಲಿ ನಮ್ಮನ್ನು ಹುಡುಕಿ",
+    openMap: "ಗೂಗಲ್ ಮ್ಯಾಪ್ಸ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ",
     waHi: "ನಮಸ್ಕಾರ ಕರುನಾಡು ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ಸ್!",
   },
 }[lang];
@@ -142,7 +144,6 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
           <a class="btn btn--red" href={lp(lang, "/retailers/")}><Icon name="store" /> {copy.ctaShop}</a>
           <a class="btn btn--ghost" href={lp(lang, "/manufacturers/")}><Icon name="factory" /> {copy.ctaBrand}</a>
         </div>
-        <p class="hero__kn" lang={copy.altLine.lang}>{copy.altLine.text}</p>
       </div>
       <div class="hero__visual">
         {hero && (
@@ -291,6 +292,10 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
           <li><span><strong>{copy.hoursLabel}</strong>{site.hours[lang]}</span></li>
         </ul>
         <a class="btn btn--wa enq-wa" href={waLink(copy.waHi)} target="_blank" rel="noopener"><Icon name="whatsapp" /> {copy.quickWa}</a>
+        <div class="home-map">
+          <iframe title={`${copy.mapTitle}: ${fullAddress(lang)}`} src={mapEmbedUrl(lang)} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <p class="home-map__cap"><Icon name="pin" size={16} /> <span>{fullAddress(lang)}</span> <a href={site.mapsLink} target="_blank" rel="noopener">{copy.openMap}</a></p>
       </div>
       <div class="reveal"><EnquiryForm /></div>
     </div>
@@ -310,7 +315,6 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
   .hl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.02em; height: 0.16em; background: var(--sun); z-index: -1; border-radius: 4px; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
   @media (max-width: 479px) { .hero__cta .btn { flex: 1 1 100%; } }
-  .hero__kn { margin: 20px 0 0; font-size: 0.92rem; color: var(--leaf); font-weight: 600; }
   .hero__visual { position: relative; }
   .hero__img { border-radius: 22px; overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 3 / 2; border: 4px solid #fff; transform: rotate(0.6deg); }
   .hero__img :global(img) { width: 100%; height: 100%; object-fit: cover; }
@@ -331,11 +335,12 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
 
   .stats { background: var(--leaf); color: #fff; }
   .stats__grid { display: grid; grid-template-columns: repeat(2, 1fr); }
-  @media (min-width: 900px) { .stats__grid { grid-template-columns: repeat(4, 1fr); } }
-  .stat { padding: 22px 8px; display: grid; gap: 2px; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.14); border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+  @media (min-width: 900px) { .stats__grid { grid-template-columns: repeat(5, 1fr); } }
+  .stat { padding: 20px 8px; display: grid; gap: 4px; align-content: center; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.14); border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
   .stat:nth-child(2n) { border-right: 0; }
-  @media (min-width: 900px) { .stat { border-bottom: 0; padding: 30px 8px; } .stat:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.14); } .stat:last-child { border-right: 0; } }
-  .stat__value { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.4rem); color: var(--sun); line-height: 1.1; }
+  .stat:last-child:nth-child(odd) { grid-column: 1 / -1; border-bottom: 0; border-right: 0; }
+  @media (min-width: 900px) { .stat { border-bottom: 0; padding: 28px 10px; } .stat:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.14); } .stat:last-child { grid-column: auto; border-right: 0; } }
+  .stat__value { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.15rem, 3.6vw, 1.55rem); color: var(--sun); line-height: 1.15; }
   .stat__label { font-size: 0.86rem; opacity: 0.88; }
 
   .aud { border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--line); }
@@ -365,6 +370,10 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
 
   .campaigns { padding-bottom: 64px; }
   .enq-wa { margin-top: 20px; }
+  .home-map { margin-top: 24px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4 / 3; background: var(--paper-2); box-shadow: var(--shadow); }
+  .home-map iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .home-map__cap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 10px; font-size: 0.9rem; color: var(--muted); }
+  .home-map__cap a { color: var(--chilli); font-weight: 700; }
   :lang(kn) .hero h1 { font-size: clamp(2.1rem, 8vw, 3.9rem); line-height: 1.25; letter-spacing: 0; }
   :lang(kn) .hl { white-space: normal; }
   .posters { list-style: none; margin: 0; padding: 4px var(--gutter) 12px; display: grid; grid-auto-flow: column; grid-auto-columns: 68%; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; max-width: calc(var(--max) + var(--gutter) * 2); margin-inline: auto; }

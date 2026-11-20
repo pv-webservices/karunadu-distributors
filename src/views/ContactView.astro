@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import Icon from "../components/Icon.astro";
 import EnquiryForm from "../components/EnquiryForm.astro";
-import { site, waLink, fullAddress } from "../data/site";
+import { site, waLink, fullAddress, mapEmbedUrl } from "../data/site";
 import { getLang } from "../i18n";
 import { t } from "../i18n/ui";
 
@@ -44,8 +44,8 @@ const copy = {
   },
 }[lang];
 
-const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(site.mapsQuery)}&hl=${lang}&output=embed`;
-const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.mapsQuery)}`;
+const mapSrc = mapEmbedUrl(lang);
+const mapLink = site.mapsLink;
 ---
 <Base title={copy.title} description={copy.description}>
   <PageHero eyebrow={copy.eyebrow} title={copy.h1} lede={copy.lede} crumbs={[{ href: "/contact/", label: copy.title }]} />
@@ -88,7 +88,7 @@ const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
         <h2>{copy.enqTitle}</h2>
         <p class="lede">{copy.enqLede}</p>
         <div class="mapbox">
-          <iframe title={`${copy.map}: ${fullAddress(lang)}`} src={mapSrc} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title={`${copy.map}: ${fullAddress(lang)}`} src={mapSrc} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
         <p class="mapcap"><Icon name="pin" size={16} /> {fullAddress(lang)}</p>
       </div>

@@ -45,6 +45,8 @@ const jsonLd = {
     postalCode: site.address.pin,
     addressCountry: "IN",
   },
+  geo: { "@type": "GeoCoordinates", latitude: site.geo.lat, longitude: site.geo.lng },
+  hasMap: site.mapsLink,
   areaServed: ["Bengaluru", "Karnataka"],
   openingHours: "Mo-Sa 09:00-20:00",
   inLanguage: lang === "kn" ? "kn-IN" : "en-IN",

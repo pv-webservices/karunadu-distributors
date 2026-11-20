@@ -32,7 +32,7 @@ const en = {
   categories: "Categories",
   reachUs: "Reach us",
   rights: "All rights reserved.",
-  footerLine: "ಬೆಂಗಳೂರು • ಕರ್ನಾಟಕದಾದ್ಯಂತ ಸೇವೆ",
+  footerLine: "Bengaluru first • Growing across Karnataka",
 
   orderEyebrow: "Stock enquiry",
   orderTitle: "Your order list",
@@ -143,7 +143,7 @@ const kn: UiStrings = {
   categories: "ವಿಭಾಗಗಳು",
   reachUs: "ಸಂಪರ್ಕ",
   rights: "ಎಲ್ಲ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.",
-  footerLine: "Bengaluru • Serving all of Karnataka",
+  footerLine: "ಮೊದಲು ಬೆಂಗಳೂರು • ಕರ್ನಾಟಕದತ್ತ ವಿಸ್ತರಣೆ",
 
   orderEyebrow: "ಸ್ಟಾಕ್ ವಿಚಾರಣೆ",
   orderTitle: "ನಿಮ್ಮ ಆರ್ಡರ್ ಪಟ್ಟಿ",

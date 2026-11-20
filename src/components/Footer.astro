@@ -16,7 +16,7 @@ const year = new Date().getFullYear();
         <img src="/images/logo.webp" width="44" height="44" alt="" loading="lazy" />
         <span>Karunadu <em>Distributors</em></span>
       </a>
-      <p class="kn footer__kn" lang="kn">{site.nameKn}</p>
+      {lang === "kn" && <p class="footer__kn">{site.nameKn}</p>}
       <p>{s.footerBlurb}</p>
       <a class="btn btn--sun btn--sm" href={waLink(s.waOrder)} target="_blank" rel="noopener">
         <Icon name="whatsapp" /> {s.orderOnWa}
@@ -49,7 +49,7 @@ const year = new Date().getFullYear();
   </div>
   <div class="wrap footer__bottom">
     <span>© {year} {site.name}. {s.rights}</span>
-    <span lang={lang === "en" ? "kn" : "en"}>{s.footerLine}</span>
+    <span>{s.footerLine}</span>
   </div>
 </footer>
 

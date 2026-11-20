@@ -26,15 +26,19 @@ export const site = {
   },
   hours: { en: "Mon – Sat, 9:00 AM – 8:00 PM", kn: "ಸೋಮ – ಶನಿ, ಬೆಳಿಗ್ಗೆ 9:00 – ರಾತ್ರಿ 8:00" } satisfies L,
   mapsQuery: "Varthur, Bengaluru, Karnataka 560087",
+  // Exact Google Maps pin for the Varthur hub.
+  geo: { lat: 12.9388909, lng: 77.7660651 },
+  mapsLink: "https://maps.app.goo.gl/jj3rJC2NiPcGTpdr5",
   serviceAreas: {
-    en: ["Whitefield & Varthur", "Marathahalli & Bellandur", "Sarjapur Road & HSR Layout", "Electronic City", "KR Puram & Mahadevapura", "Bengaluru Urban & Rural", "Statewide Karnataka network"],
-    kn: ["ವೈಟ್‌ಫೀಲ್ಡ್ & ವರ್ತೂರು", "ಮಾರತ್ತಹಳ್ಳಿ & ಬೆಳ್ಳಂದೂರು", "ಸರ್ಜಾಪುರ ರಸ್ತೆ & ಎಚ್‌ಎಸ್‌ಆರ್ ಲೇಔಟ್", "ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ", "ಕೆ.ಆರ್. ಪುರಂ & ಮಹದೇವಪುರ", "ಬೆಂಗಳೂರು ನಗರ & ಗ್ರಾಮಾಂತರ", "ಕರ್ನಾಟಕದಾದ್ಯಂತ ಜಾಲ"],
+    en: ["Whitefield & Varthur", "Marathahalli & Bellandur", "Sarjapur Road & HSR Layout", "Electronic City", "KR Puram & Mahadevapura", "Bengaluru Urban & Rural", "Growing Karnataka network"],
+    kn: ["ವೈಟ್‌ಫೀಲ್ಡ್ & ವರ್ತೂರು", "ಮಾರತ್ತಹಳ್ಳಿ & ಬೆಳ್ಳಂದೂರು", "ಸರ್ಜಾಪುರ ರಸ್ತೆ & ಎಚ್‌ಎಸ್‌ಆರ್ ಲೇಔಟ್", "ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ", "ಕೆ.ಆರ್. ಪುರಂ & ಮಹದೇವಪುರ", "ಬೆಂಗಳೂರು ನಗರ & ಗ್ರಾಮಾಂತರ", "ಬೆಳೆಯುತ್ತಿರುವ ಕರ್ನಾಟಕ ಜಾಲ"],
   } satisfies L<string[]>,
   stats: [
-    { value: { en: "500+", kn: "500+" }, label: { en: "Retail outlets served", kn: "ಸೇವೆ ಪಡೆಯುವ ಅಂಗಡಿಗಳು" } },
-    { value: { en: "24–48 hr", kn: "24–48 ಗಂ." }, label: { en: "Stock replenishment", kn: "ಸ್ಟಾಕ್ ಮರುಪೂರೈಕೆ" } },
-    { value: { en: "18", kn: "18" }, label: { en: "Product lines", kn: "ಉತ್ಪನ್ನ ಶ್ರೇಣಿಗಳು" } },
-    { value: { en: "100%", kn: "100%" }, label: { en: "Genuine stock", kn: "ಅಸಲಿ ಸ್ಟಾಕ್" } },
+    { value: { en: "Growing Network", kn: "ಬೆಳೆಯುತ್ತಿರುವ ಜಾಲ" }, label: { en: "Retailers across Bengaluru", kn: "ಬೆಂಗಳೂರಿನಾದ್ಯಂತ ಅಂಗಡಿಗಳು" } },
+    { value: { en: "Multi-Category", kn: "ಬಹು-ವಿಭಾಗ" }, label: { en: "Food, beverage & FMCG", kn: "ಆಹಾರ, ಪಾನೀಯ & FMCG" } },
+    { value: { en: "Local Logistics", kn: "ಸ್ಥಳೀಯ ಸಾಗಣೆ" }, label: { en: "Neighbourhood delivery routes", kn: "ನೆರೆಹೊರೆಯ ಡೆಲಿವರಿ ಮಾರ್ಗಗಳು" } },
+    { value: { en: "Flexible Delivery", kn: "ಅನುಕೂಲಕರ ಡೆಲಿವರಿ" }, label: { en: "Slots that suit your shop", kn: "ನಿಮ್ಮ ಅಂಗಡಿಗೆ ತಕ್ಕ ಸಮಯ" } },
+    { value: { en: "Bengaluru First", kn: "ಮೊದಲು ಬೆಂಗಳೂರು" }, label: { en: "Growing across Karnataka", kn: "ಕರ್ನಾಟಕದತ್ತ ವಿಸ್ತರಣೆ" } },
   ] satisfies Array<{ value: L; label: L }>,
 } as const;
 
@@ -49,6 +53,12 @@ export const nav = [
 
 export function waLink(message: string): string {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
+/** Google Maps embed URL centred on the hub pin, with labels in the page language. */
+export function mapEmbedUrl(lang: Lang): string {
+  const { lat, lng } = site.geo;
+  return `https://www.google.com/maps?q=${lat},${lng}&z=17&hl=${lang}&output=embed`;
 }
 
 export function fullAddress(lang: Lang): string {

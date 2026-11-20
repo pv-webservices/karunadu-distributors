@@ -64,7 +64,7 @@ const waHello = waLink(s.waHello);
   <div class="drawer__scrim" data-menu-close></div>
   <div class="drawer__panel" role="dialog" aria-modal="true" aria-label={s.menu}>
     <div class="drawer__head">
-      <span class="kn drawer__kn" lang="kn">{site.nameKn}</span>
+      <span class="drawer__kn">{lang === "kn" ? site.nameKn : site.name}</span>
       <button class="menu-btn" type="button" data-menu-close aria-label={s.menuClose}><Icon name="close" size={26} /></button>
     </div>
     <ul class="drawer__nav">
