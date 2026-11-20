@@ -338,8 +338,8 @@ const posters = ["poster-tusk-cashback", "poster-beekay-store", "poster-beekay-i
   @media (min-width: 900px) { .stats__grid { grid-template-columns: repeat(5, 1fr); } }
   .stat { padding: 20px 8px; display: grid; gap: 4px; align-content: center; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.14); border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
   .stat:nth-child(2n) { border-right: 0; }
-  .stat:last-child:nth-child(odd) { grid-column: 1 / -1; border-bottom: 0; border-right: 0; }
-  @media (min-width: 900px) { .stat { border-bottom: 0; padding: 28px 10px; } .stat:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.14); } .stat:last-child { grid-column: auto; border-right: 0; } }
+  @media (max-width: 899px) { .stat:last-child:nth-child(odd) { grid-column: 1 / -1; border-bottom: 0; border-right: 0; } }
+  @media (min-width: 900px) { .stat { border-bottom: 0; padding: 28px 10px; } .stat:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.14); } .stat:last-child { border-right: 0; } }
   .stat__value { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.15rem, 3.6vw, 1.55rem); color: var(--sun); line-height: 1.15; }
   .stat__label { font-size: 0.86rem; opacity: 0.88; }
 
